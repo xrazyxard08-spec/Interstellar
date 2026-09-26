@@ -67,9 +67,9 @@
 </head>
 
 <body class="center" onload="SplashT">
-  <!-- LOCKOUT BUTTON -->
-  <button id="lock-button" onclick="lockOut()" style="position: fixed; top: 12px; right: 12px; z-index: 99998; display: none; background: #222; color: #fff; border: 1px solid #444; padding: 6px 12px; border-radius: 4px; font-size: 0.8rem; cursor: pointer;">
-    Lock
+  <!-- RETRO WINDOWS 95 / WEB 1.0 LOCKOUT BUTTON -->
+  <button id="lock-button" onclick="lockOut()" style="position: fixed; top: 8px; right: 8px; z-index: 99998; display: none; background: #c0c0c0; color: #000000; border-top: 2px solid #ffffff; border-left: 2px solid #ffffff; border-right: 2px solid #000000; border-bottom: 2px solid #000000; padding: 3px 8px; font-family: 'Times New Roman', Times, serif; font-size: 13px; font-weight: bold; cursor: pointer;">
+    [Lock Session]
   </button>
 
   <div class="nav-bar"></div>
@@ -90,28 +90,50 @@
   <script src="/assets/scramjet/scramjet.all.js"></script>
   <script src="/assets/scramjet/scramjet.config.js"></script>
 
-  <!-- ULTRA-SIMPLE ACCESS GATE -->
-  <div id="access-gate" style="position: fixed; inset: 0; background: #121212; display: flex; align-items: center; justify-content: center; z-index: 99999; font-family: system-ui, -apple-system, sans-serif; color: #ffffff;">
-    <div style="width: 100%; max-width: 320px; padding: 24px; box-sizing: border-box; background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 6px;">
-      <h2 style="margin: 0 0 16px 0; font-size: 1.1rem; font-weight: 500; text-align: center; color: #ffffff;">Enter Passcode</h2>
+  <!-- AUTHENTIC WEB 1.0 DIALOG BOX OVERLAY -->
+  <div id="access-gate" style="position: fixed; inset: 0; background: #008080; display: flex; align-items: center; justify-content: center; z-index: 99999; font-family: 'Times New Roman', Times, serif; color: #000000;">
+    
+    <div style="width: 360px; background: #c0c0c0; border-top: 2px solid #ffffff; border-left: 2px solid #ffffff; border-right: 2px solid #000000; border-bottom: 2px solid #000000; padding: 2px; box-shadow: 2px 2px 0px #000000;">
+      
+      <!-- Classic Blue Window Title Bar -->
+      <div style="background: #000080; color: #ffffff; padding: 3px 6px; font-weight: bold; font-size: 13px; display: flex; justify-content: space-between; align-items: center;">
+        <span>System Authentication - Restricted Access</span>
+        <span style="background: #c0c0c0; color: #000; border-top: 1px solid #fff; border-left: 1px solid #fff; border-right: 1px solid #000; border-bottom: 1px solid #000; width: 14px; height: 14px; line-height: 12px; text-align: center; font-size: 10px; font-weight: bold; cursor: default;">x</span>
+      </div>
 
-      <form onsubmit="event.preventDefault(); validateAccessCode();" style="display: flex; flex-direction: column; gap: 10px;">
-        <div style="display: flex; align-items: center; background: #0f0f0f; border: 1px solid #333333; border-radius: 4px; overflow: hidden;">
-          <input type="password" id="access-input" autocomplete="off" spellcheck="false" placeholder="Passcode" style="flex: 1; padding: 10px 12px; border: none; background: transparent; color: #ffffff; font-size: 0.95rem; outline: none;" />
-          <button type="button" onclick="togglePasscodeVisibility()" style="background: none; border: none; padding: 0 10px; cursor: pointer; color: #777777;">
-            <i id="eye-icon" class="fa-solid fa-eye"></i>
-          </button>
-        </div>
+      <!-- Dialog Body -->
+      <div style="padding: 16px;">
+        <p style="margin: 0 0 12px 0; font-size: 14px;">
+          <b>Security Prompt:</b> Please enter passcode to gain site authorization.
+        </p>
 
-        <button type="submit" style="padding: 10px; background: #2563eb; color: #ffffff; border: none; border-radius: 4px; font-weight: 600; font-size: 0.9rem; cursor: pointer;">
-          Submit
-        </button>
-      </form>
+        <form onsubmit="event.preventDefault(); validateAccessCode();" style="display: flex; flex-direction: column; gap: 12px;">
+          <div style="display: flex; align-items: center; background: #ffffff; border-top: 2px solid #000000; border-left: 2px solid #000000; border-right: 2px solid #ffffff; border-bottom: 2px solid #ffffff;">
+            <input type="password" id="access-input" autocomplete="off" spellcheck="false" placeholder="Passcode..." style="flex: 1; padding: 4px 6px; border: none; background: transparent; font-family: 'Courier New', Courier, monospace; font-size: 14px; color: #000000; outline: none;" />
+            <button type="button" onclick="togglePasscodeVisibility()" style="background: #c0c0c0; border-top: 1px solid #ffffff; border-left: 1px solid #ffffff; border-right: 1px solid #000000; border-bottom: 1px solid #000000; padding: 2px 6px; cursor: pointer; color: #000000; margin-right: 2px;" title="Show/Hide Password">
+              <i id="eye-icon" class="fa-solid fa-eye" style="font-size: 12px;"></i>
+            </button>
+          </div>
 
-      <p id="access-error" style="color: #ef4444; font-size: 0.85rem; margin-top: 12px; margin-bottom: 0; text-align: center; display: none;">
-        Incorrect passcode.
-      </p>
+          <div style="display: flex; justify-content: flex-end; gap: 8px;">
+            <button type="submit" style="background: #c0c0c0; color: #000000; border-top: 2px solid #ffffff; border-left: 2px solid #ffffff; border-right: 2px solid #000000; border-bottom: 2px solid #000000; padding: 4px 16px; font-family: 'Times New Roman', Times, serif; font-size: 13px; font-weight: bold; cursor: pointer;">
+              OK
+            </button>
+          </div>
+        </form>
+
+        <p id="access-error" style="color: #ff0000; font-size: 13px; font-weight: bold; margin-top: 12px; margin-bottom: 0; display: none;">
+          Error: Access Denied. Invalid Passcode.
+        </p>
+      </div>
+
+      <!-- Status Footer -->
+      <div style="border-top: 1px solid #808080; padding: 4px 8px; font-size: 11px; color: #404040;">
+        Status: Awaiting user input...
+      </div>
+
     </div>
+
   </div>
 
   <script>
@@ -161,11 +183,11 @@
           sessionStorage.setItem("interstellar_authenticated", "true");
           checkAccessCode();
         } else {
-          errorEl.textContent = data.message || "Incorrect passcode.";
+          errorEl.textContent = data.message || "Error: Access Denied. Invalid Passcode.";
           errorEl.style.display = "block";
         }
       } catch (err) {
-        errorEl.textContent = "Server error. Try again.";
+        errorEl.textContent = "Error: Server connection failed.";
         errorEl.style.display = "block";
       }
     }
