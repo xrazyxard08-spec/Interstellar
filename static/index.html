@@ -34,6 +34,60 @@
   <script src="./assets/ultraviolet/uv.config.js"></script>
   <script src="/assets/scramjet/scramjet.all.js"></script>
   <script src="/assets/scramjet/scramjet.config.js"></script>
+
+  <!-- ACCESS CODE GATE OVERLAY -->
+  <div id="access-gate" style="position: fixed; inset: 0; background: #0b0e14; display: flex; align-items: center; justify-content: center; z-index: 999999; font-family: system-ui, -apple-system, sans-serif;">
+    <div style="background: #151921; border: 1px solid #2a303c; border-radius: 12px; padding: 2rem; width: 90%; max-width: 360px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.5);">
+      <h2 style="color: #ffffff; margin: 0 0 0.5rem 0; font-size: 1.5rem;">Access Required</h2>
+      <p style="color: #9ba3af; font-size: 0.875rem; margin: 0 0 1.5rem 0;">Enter the passcode to access Interstellar.</p>
+      <form onsubmit="event.preventDefault(); validateAccessCode();">
+        <input type="password" id="access-input" placeholder="Enter Passcode" style="width: 100%; padding: 0.75rem; border-radius: 8px; border: 1px solid #2a303c; background: #0b0e14; color: #fff; font-size: 1rem; margin-bottom: 1rem; box-sizing: border-box; outline: none;" />
+        <button type="submit" style="width: 100%; padding: 0.75rem; border-radius: 8px; border: none; background: #6366f1; color: #ffffff; font-weight: 600; font-size: 1rem; cursor: pointer;">Unlock Proxy</button>
+      </form>
+      <p id="access-error" style="color: #ef4444; font-size: 0.85rem; margin-top: 0.75rem; margin-bottom: 0; display: none;">Incorrect passcode. Please try again.</p>
+    </div>
+  </div>
+
+  <script>
+    async function checkAccessCode() {
+      const isAuth = localStorage.getItem("interstellar_authenticated");
+      if (isAuth === "true") {
+        document.getElementById("access-gate").style.display = "none";
+      } else {
+        document.getElementById("access-gate").style.display = "flex";
+      }
+    }
+
+    async function validateAccessCode() {
+      const inputVal = document.getElementById("access-input").value;
+      const errorEl = document.getElementById("access-error");
+
+      try {
+        const response = await fetch('/api/verify-access', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ code: inputVal })
+        });
+
+        const data = await response.json();
+
+        if (response.ok && data.success) {
+          localStorage.setItem("interstellar_authenticated", "true");
+          document.getElementById("access-gate").style.display = "none";
+        } else {
+          errorEl.textContent = data.message || "Incorrect passcode. Please try again.";
+          errorEl.style.display = "block";
+        }
+      } catch (err) {
+        errorEl.textContent = "Server verification failed. Please try again.";
+        errorEl.style.display = "block";
+      }
+    }
+
+    // Run authentication check on initial page load
+    checkAccessCode();
+  </script>
+
   <!-- DO NOT REMOVE-->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-WKJQ5QHQTJ"></script>
   <script>
