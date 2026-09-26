@@ -1,233 +1,599 @@
-import React, { useState } from 'react';
+<!doctype html>
+<html lang="en">
 
-export default function WindowsOS() {
-  const [windows, setWindows] = useState([]);
-  const [activeWindow, setActiveWindow] = useState(null);
-  const [contextMenu, setContextMenu] = useState({ show: false, x: 0, y: 0 });
-  const [filePath, setFilePath] = useState('root');
+<head>
+  <meta charset="UTF-8" />
+  <meta name="referrer" content="no-referrer" />
+  <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="shortcut icon" id="tab-favicon" href="favicon.png" />
+  <title id="t">Home</title>
+  <link rel="stylesheet" href="/assets/css/global.css" />
+  <link rel="stylesheet" href="/assets/css/home.css" />
+  <link rel="stylesheet" href="/assets/css/nav.css" />
+  <script src="/assets/js/storage.js"></script>
+  <script src="/assets/js/main.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-  const openApp = (appId) => {
-    if (!windows.find((w) => w.id === appId)) {
-      setWindows([...windows, { id: appId, x: 100 + windows.length * 30, y: 50 + windows.length * 30 }]);
+  <!-- POPUP / POPUNDER BLOCKER -->
+  <script>
+    (function() {
+      const BLOCKED_DOMAINS = [
+        "undercoverhiking.com",
+        "bad-ad-network.com",
+        "popunder.xyz",
+        "redirect-link.net"
+      ];
+
+      function isBlocked(url) {
+        if (!url || typeof url !== "string") return false;
+        return BLOCKED_DOMAINS.some(domain => url.toLowerCase().includes(domain.toLowerCase()));
+      }
+
+      const originalOpen = window.open;
+      window.open = function(url, target, features) {
+        if (isBlocked(url)) {
+          console.log("Blocked popup redirect:", url);
+          return null;
+        }
+        return originalOpen.apply(this, arguments);
+      };
+
+      document.addEventListener("click", function(e) {
+        let target = e.target;
+        while (target && target !== document) {
+          const href = target.href || "";
+          const onclickAttr = target.getAttribute && target.getAttribute("onclick") || "";
+
+          if (isBlocked(href) || isBlocked(onclickAttr)) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log("Blocked click redirect:", href || onclickAttr);
+            break;
+          }
+          target = target.parentNode;
+        }
+      }, true);
+    })();
+  </script>
+
+  <style>
+    a[target="_blank"][style*="position: fixed"],
+    a[target="_blank"][style*="position: absolute"] {
+      display: none !important;
+      pointer-events: none !important;
     }
-    setActiveWindow(appId);
-  };
 
-  const closeApp = (appId) => {
-    setWindows(windows.filter((w) => w.id !== appId));
-    if (activeWindow === appId) setActiveWindow(null);
-  };
+    /* WEB 1.0 HARDWARE / FORM OVERRIDES */
+    input, button, table, td, th {
+      border-radius: 0px !important;
+    }
+  </style>
 
-  const handleRightClick = (e) => {
-    e.preventDefault();
-    setContextMenu({ show: true, x: e.pageX, y: e.pageY });
-  };
+  <!-- ===================== WINDOWS 7 DESKTOP THEME ===================== -->
+  <style>
+    * { box-sizing: border-box; }
 
-  return (
-    <div 
-      className="w-screen h-screen bg-blue-600 overflow-hidden relative font-sans select-none"
-      onContextMenu={handleRightClick} 
-      onClick={() => setContextMenu({ show: false, x: 0, y: 0 })}
-    >
-      {/* Desktop Icons */}
-      <div className="flex flex-col gap-2 p-2 items-start w-24 h-[calc(100vh-3rem)] flex-wrap">
-        <DesktopIcon icon="📁" label="Files" onDoubleClick={() => openApp('files')} />
-        <DesktopIcon icon="🌐" label="Edge Browser" onDoubleClick={() => openApp('browser')} />
-        <DesktopIcon icon="📝" label="Notepad" onDoubleClick={() => openApp('notepad')} />
-        <DesktopIcon icon="🎨" label="Paint" onDoubleClick={() => openApp('paint')} />
-        <DesktopIcon icon="🧮" label="Calculator" onDoubleClick={() => openApp('calculator')} />
-        <DesktopIcon icon="🗑️" label="Recycle Bin" onDoubleClick={() => {}} />
+    #win7-desktop, #exe-loader {
+      position: fixed;
+      inset: 0;
+      z-index: 99990;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      display: none;
+    }
+
+    /* ---------- Wallpaper ---------- */
+    .win7-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 900px 500px at 25% 15%, rgba(255, 255, 255, 0.18), transparent 60%),
+        radial-gradient(ellipse 1200px 800px at 80% 90%, rgba(120, 200, 255, 0.15), transparent 55%),
+        linear-gradient(150deg, #2a75c7 0%, #14539e 40%, #0c3a72 55%, #082a54 100%);
+    }
+
+    /* ---------- Desktop icons ---------- */
+    .win7-icons {
+      position: absolute;
+      top: 22px;
+      left: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .win7-icon {
+      width: 82px;
+      text-align: center;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .win7-icon .icon-glyph {
+      width: 46px;
+      height: 46px;
+      margin: 0 auto 5px;
+      border-radius: 8px;
+      background: linear-gradient(160deg, #f4f7fb 0%, #cfd9e6 55%, #aeb9c9 100%);
+      border: 1px solid rgba(0, 0, 0, 0.25);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      color: #3a5a86;
+    }
+
+    .win7-icon span {
+      display: inline-block;
+      color: #fff;
+      font-size: 12px;
+      line-height: 1.3;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.9);
+      padding: 1px 4px;
+      border-radius: 2px;
+    }
+
+    .win7-icon.selected .icon-glyph {
+      background: linear-gradient(160deg, #dceaff 0%, #a9c8ef 55%, #7fa8d6 100%);
+      outline: 1px dotted rgba(255, 255, 255, 0.8);
+    }
+
+    .win7-icon.selected span {
+      background: rgba(30, 90, 170, 0.6);
+      outline: 1px dotted rgba(255, 255, 255, 0.7);
+    }
+
+    .win7-icon .icon-hint {
+      display: block;
+      font-size: 10px;
+      opacity: 0.85;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.9);
+    }
+
+    /* ---------- Taskbar ---------- */
+    .win7-taskbar {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 42px;
+      display: flex;
+      align-items: stretch;
+      background: linear-gradient(to bottom, rgba(74, 122, 185, 0.97), rgba(12, 40, 82, 0.97));
+      border-top: 1px solid rgba(255, 255, 255, 0.4);
+      box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.4);
+    }
+
+    .win7-start {
+      width: 58px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      background: radial-gradient(circle at 32% 28%, #9fe272 0%, #4f9a34 55%, #2b5f1c 100%);
+      border-right: 1px solid rgba(0, 0, 0, 0.3);
+      box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.35);
+      color: #143a08;
+      font-size: 18px;
+    }
+
+    .win7-start:hover { filter: brightness(1.12); }
+
+    .win7-taskbar-mid {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      padding-left: 10px;
+      color: rgba(255, 255, 255, 0.55);
+      font-size: 12px;
+      letter-spacing: 0.3px;
+    }
+
+    .win7-tray {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0 12px;
+      color: #fff;
+      border-left: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    .win7-clock {
+      text-align: right;
+      font-size: 12px;
+      line-height: 1.25;
+      color: #fff;
+    }
+
+    /* ---------- Start menu ---------- */
+    .win7-start-menu {
+      display: none;
+      position: absolute;
+      left: 0;
+      bottom: 42px;
+      width: 230px;
+      background: linear-gradient(to bottom, #fbfcfe, #e4eaf2);
+      border: 1px solid #3a6ea5;
+      border-radius: 6px 6px 0 0;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
+      overflow: hidden;
+      font-size: 13px;
+    }
+
+    .win7-start-menu-header {
+      background: linear-gradient(to bottom, #3d7dc4, #1c4d86);
+      color: #fff;
+      padding: 8px 12px;
+      font-weight: bold;
+    }
+
+    .win7-start-menu-item {
+      padding: 9px 14px;
+      cursor: pointer;
+      color: #1c2c3c;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .win7-start-menu-item:hover { background: #cfe2f7; }
+
+    /* ---------- Generic Aero window frame (used by loader + login dialog) ---------- */
+    .win7-window {
+      background: #f2f5f9;
+      border: 1px solid #1c4d86;
+      border-radius: 7px 7px 3px 3px;
+      box-shadow: 0 14px 40px rgba(0, 0, 0, 0.55);
+      overflow: hidden;
+    }
+
+    .win7-titlebar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 8px;
+      background: linear-gradient(to bottom, #6fb1ea 0%, #2f6fb4 45%, #1c4d86 100%);
+      color: #fff;
+    }
+
+    .win7-titlebar-icon { font-size: 13px; opacity: 0.95; }
+
+    .win7-titlebar-text {
+      flex: 1;
+      font-size: 12.5px;
+      font-weight: bold;
+      text-shadow: 0 1px 1px rgba(0, 0, 0, 0.4);
+    }
+
+    .win7-titlebar-controls { display: flex; gap: 2px; }
+
+    .win7-tbtn {
+      width: 24px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      cursor: pointer;
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .win7-tbtn:hover { background: rgba(255, 255, 255, 0.3); }
+    .win7-tbtn-close:hover { background: #e0413a; }
+
+    /* ---------- Fake exe loader ---------- */
+    #exe-loader { align-items: center; justify-content: center; }
+    #exe-loader .win7-bg { background: rgba(5, 15, 30, 0.55); backdrop-filter: blur(1px); }
+
+    .exe-loader-box { position: relative; width: 320px; }
+
+    .exe-loader-body { padding: 20px 18px 18px; text-align: center; color: #263646; }
+
+    .exe-loader-body p { font-size: 12.5px; margin: 0 0 14px; }
+
+    .exe-progress {
+      position: relative;
+      height: 16px;
+      border: 1px solid #9fb3c8;
+      border-radius: 3px;
+      background: #dde6ef;
+      overflow: hidden;
+    }
+
+    .exe-progress-fill {
+      position: absolute;
+      top: 0; bottom: 0; left: -40%;
+      width: 40%;
+      background: linear-gradient(to bottom, #7fc4f5, #2f7fc4);
+      animation: exeSlide 1.1s ease-in-out infinite;
+      border-radius: 2px;
+    }
+
+    @keyframes exeSlide {
+      0% { left: -40%; }
+      100% { left: 100%; }
+    }
+
+    /* ---------- Access gate now sits inside a win7 window ---------- */
+    #access-gate { z-index: 99995; }
+    #access-gate .win7-window { width: 400px; }
+    #access-gate table { border: none !important; background: transparent !important; }
+    #access-gate table td { border: none !important; }
+  </style>
+</head>
+
+<body class="center" onload="SplashT" style="background-color: #CCCCCC;">
+  <!-- LOCKOUT BUTTON -->
+  <button id="lock-button" onclick="lockOut()" style="position: fixed; top: 10px; right: 10px; z-index: 99998; display: none; background: #CCCCCC; color: #000000; border: 2px outset #FFFFFF; padding: 4px 10px; font-family: 'Courier New', Courier, monospace; font-size: 12px; font-weight: bold; cursor: pointer;">
+    [ LOCK SESSION ]
+  </button>
+
+  <div class="nav-bar"></div>
+  <div class="main">
+    <h1 class="title">&#73;&#110;&#116;&#101;&#114;&#115;&#116;&#101;&#108;&#108;&#97;&#114;</h1>
+    <p id="splash"></p>
+    <div class="search-container">
+      <form id="fv" method="POST">
+        <input id="input" class="truncate" placeholder="Search or enter a URL" type="text" />
+      </form>
+    </div>
+  </div>
+  <script src="/assets/js/vendor.js"></script>
+  <script src="assets/js/search.js"></script>
+  <script src="/assets/js/home.js"></script>
+  <script src="./assets/ultraviolet/uv.bundle.js"></script>
+  <script src="./assets/ultraviolet/uv.config.js"></script>
+  <script src="/assets/scramjet/scramjet.all.js"></script>
+  <script src="/assets/scramjet/scramjet.config.js"></script>
+
+  <!-- ===================== WINDOWS 7 LOCKED DESKTOP ===================== -->
+  <div id="win7-desktop">
+    <div class="win7-bg" onclick="deselectIcons()"></div>
+
+    <div class="win7-icons">
+      <div class="win7-icon" ondblclick="launchExe()" onclick="selectIcon(this)">
+        <div class="icon-glyph"><i class="fa-solid fa-terminal"></i></div>
+        <span>importent.exe<span class="icon-hint">(double-click)</span></span>
       </div>
+    </div>
 
-      {/* Render Open Windows */}
-      {windows.map((win) => (
-        <Window
-          key={win.id}
-          appId={win.id}
-          isActive={activeWindow === win.id}
-          onClick={() => setActiveWindow(win.id)}
-          onClose={() => closeApp(win.id)}
-          x={win.x}
-          y={win.y}
-          filePath={filePath}
-          setFilePath={setFilePath}
-          openApp={openApp}
-        />
-      ))}
-
-      {/* Right-Click Context Menu */}
-      {contextMenu.show && (
-        <div 
-          className="absolute bg-white border border-gray-300 shadow-lg w-56 text-sm py-1 z-50 rounded shadow-gray-500/50 text-gray-800" 
-          style={{ top: contextMenu.y, left: contextMenu.x }}
-        >
-          <div className="px-6 py-1.5 hover:bg-gray-100 cursor-default">View</div>
-          <div className="px-6 py-1.5 hover:bg-gray-100 cursor-default">Sort by</div>
-          <div className="px-6 py-1.5 hover:bg-gray-100 cursor-default">Refresh</div>
-          <div className="border-t border-gray-200 my-1"></div>
-          <div className="px-6 py-1.5 hover:bg-gray-100 cursor-default">New</div>
-          <div className="border-t border-gray-200 my-1"></div>
-          <div className="px-6 py-1.5 hover:bg-gray-100 cursor-default">Display settings</div>
-          <div className="px-6 py-1.5 hover:bg-gray-100 cursor-default">Personalize</div>
-        </div>
-      )}
-
-      {/* Taskbar */}
-      <div className="absolute bottom-0 w-full h-12 bg-[#1e2328] flex items-center px-2 z-[100]">
-        <button className="text-white hover:bg-white/10 px-3 py-2 rounded flex items-center gap-2 transition-colors">
-          <span className="text-blue-400 text-xl leading-none">⊞</span>
-        </button>
-        <div className="ml-2 flex gap-1 h-full py-1">
-          {windows.map((win) => (
-            <button
-              key={`tb-${win.id}`}
-              onClick={() => setActiveWindow(win.id)}
-              className={`px-3 flex items-center justify-center min-w-[3rem] h-full rounded transition-colors ${
-                activeWindow === win.id ? 'bg-white/10 border-b-2 border-blue-400' : 'hover:bg-white/5 border-b-2 border-transparent'
-              }`}
-            >
-              <span className="text-xl">
-                {win.id === 'files' ? '📁' : win.id === 'browser' ? '🌐' : win.id === 'notepad' ? '📝' : win.id === 'paint' ? '🎨' : win.id === 'calculator' ? '🧮' : '🔑'}
-              </span>
-            </button>
-          ))}
+    <div class="win7-taskbar">
+      <div class="win7-start" onclick="toggleStartMenu()"><i class="fa-solid fa-circle-play" style="transform: rotate(-90deg);"></i></div>
+      <div class="win7-taskbar-mid">Session locked</div>
+      <div class="win7-tray">
+        <i class="fa-solid fa-shield-halved"></i>
+        <div class="win7-clock">
+          <div id="win7-clock-time">--:--</div>
+          <div id="win7-clock-date">--/--/----</div>
         </div>
       </div>
     </div>
-  );
-}
 
-function DesktopIcon({ icon, label, onDoubleClick }) {
-  return (
-    <div 
-      onDoubleClick={onDoubleClick} 
-      className="flex flex-col items-center gap-1 cursor-default hover:bg-white/20 p-2 rounded w-[72px] group"
-    >
-      <div className="text-4xl shadow-sm drop-shadow-md">{icon}</div>
-      <span className="text-white text-xs text-center drop-shadow-md bg-transparent group-hover:bg-blue-600/80 px-1 rounded line-clamp-2 leading-tight">
-        {label}
-      </span>
+    <div id="win7-start-menu" class="win7-start-menu">
+      <div class="win7-start-menu-header">Session</div>
+      <div class="win7-start-menu-item" onclick="toggleStartMenu(); launchExe();">
+        <i class="fa-solid fa-terminal"></i> Run importent.exe
+      </div>
     </div>
-  );
-}
+  </div>
 
-function Window({ appId, isActive, onClick, onClose, x, y, filePath, setFilePath, openApp }) {
-  const titles = {
-    files: 'File Explorer',
-    browser: 'Microsoft Edge',
-    notepad: 'Untitled - Notepad',
-    paint: 'Paint',
-    calculator: 'Calculator',
-    passwords: 'Vault.exe'
-  };
+  <!-- ===================== FAKE EXE LOADER ===================== -->
+  <div id="exe-loader">
+    <div class="win7-bg"></div>
+    <div class="win7-window exe-loader-box">
+      <div class="win7-titlebar">
+        <span class="win7-titlebar-icon"><i class="fa-solid fa-terminal"></i></span>
+        <span class="win7-titlebar-text">importent.exe</span>
+      </div>
+      <div class="exe-loader-body">
+        <p>Verifying system integrity&hellip;</p>
+        <div class="exe-progress"><div class="exe-progress-fill"></div></div>
+      </div>
+    </div>
+  </div>
 
-  return (
-    <div
-      onClick={onClick}
-      className={`absolute bg-[#f3f3f3] border border-gray-400 shadow-2xl flex flex-col overflow-hidden rounded-lg w-[600px] h-[400px] ${isActive ? 'z-40' : 'z-30'}`}
-      style={{ top: y, left: x }}
-    >
-      {/* Window Title Bar */}
-      <div className={`flex justify-between items-center px-3 py-2 select-none ${isActive ? 'bg-white' : 'bg-gray-100 opacity-80'}`}>
-        <div className="text-xs text-gray-800 flex items-center gap-2">
-          <span>{appId === 'files' ? '📁' : ''}</span>
-          <span>{titles[appId]}</span>
-        </div>
-        <div className="flex gap-2">
-          <button className="w-8 h-6 hover:bg-gray-200 flex items-center justify-center text-gray-600 transition-colors">─</button>
-          <button className="w-8 h-6 hover:bg-gray-200 flex items-center justify-center text-gray-600 transition-colors">☐</button>
-          <button onClick={(e) => { e.stopPropagation(); onClose(); }} className="w-8 h-6 hover:bg-red-500 hover:text-white flex items-center justify-center text-gray-600 transition-colors">✕</button>
+  <!-- WEB 1.0 TABLE GRID ACCESS GATE OVERLAY -->
+  <div id="access-gate" style="position: fixed; inset: 0; background-color: rgba(5, 15, 30, 0.55); display: none; align-items: center; justify-content: center; z-index: 99999; font-family: 'Courier New', Courier, monospace; color: #000000;">
+
+    <div class="win7-window">
+      <div class="win7-titlebar">
+        <span class="win7-titlebar-icon"><i class="fa-solid fa-shield-halved"></i></span>
+        <span class="win7-titlebar-text">System Gateway Login</span>
+        <div class="win7-titlebar-controls">
+          <div class="win7-tbtn" onclick="showDesktop()" title="Minimize">&#95;</div>
+          <div class="win7-tbtn" title="Maximize">&#9633;</div>
+          <div class="win7-tbtn win7-tbtn-close" onclick="showDesktop()" title="Close">&#10005;</div>
         </div>
       </div>
 
-      {/* Window Content Area */}
-      <div className="flex-1 overflow-auto bg-white text-black border-t border-gray-200">
-        {appId === 'files' && (
-          <FilesAppContent filePath={filePath} setFilePath={setFilePath} openApp={openApp} />
-        )}
-        {appId === 'notepad' && (
-          <textarea className="w-full h-full resize-none outline-none p-2 font-mono text-sm" placeholder="Type here..." />
-        )}
-        {appId === 'calculator' && (
-          <div className="p-4 grid grid-cols-4 gap-2 h-full bg-gray-100">
-            {/* Placeholder for calculator buttons */}
-            {[7,8,9,'/',4,5,6,'*',1,2,3,'-','C',0,'=','+'].map(btn => (
-              <button key={btn} className="bg-white border shadow-sm rounded text-lg hover:bg-gray-50">{btn}</button>
-            ))}
-          </div>
-        )}
-        {appId === 'browser' && (
-          <div className="w-full h-full flex flex-col">
-            <div className="bg-gray-100 p-2 flex gap-2 border-b">
-              <input type="text" className="flex-1 px-2 py-1 border rounded text-sm outline-blue-400" defaultValue="https://google.com" />
-            </div>
-            <div className="flex-1 bg-white flex items-center justify-center text-gray-400">Web Content Here</div>
-          </div>
-        )}
-        {appId === 'paint' && <div className="w-full h-full bg-white cursor-crosshair"></div>}
-        {appId === 'passwords' && (
-          <div className="p-6 bg-gray-900 text-green-400 h-full font-mono">
-            <h2 className="font-bold text-xl border-b border-green-800 pb-2 mb-4">CONFIDENTIAL VAULT</h2>
-            <ul className="space-y-3">
-              <li><strong>Root Access:</strong> admin / supersecret123</li>
-              <li><strong>Banking:</strong> user99 / moneytree$</li>
-              <li><strong>Crypto Wallet:</strong> xmr_miner / h@shrat3</li>
-            </ul>
-          </div>
-        )}
-      </div>
+      <table border="0" cellpadding="12" cellspacing="0" width="100%" bgcolor="#C0C0C0">
+        <tr>
+          <td align="center" bgcolor="#000080" style="color: #FFFFFF; font-family: Arial, Helvetica, sans-serif; font-size: 14px; font-weight: bold; padding: 6px;">
+            *** WARNING: RESTRICTED SYSTEM ***
+          </td>
+        </tr>
+        <tr>
+          <td align="center" bgcolor="#FFFFFF" style="border: 2px inset #808080; padding: 6px; font-family: 'Courier New', Courier, monospace; font-size: 11px; color: #FF0000; font-weight: bold;">
+            UNAUTHORIZED ACCESS IS STRICTLY PROHIBITED
+          </td>
+        </tr>
+        <tr>
+          <td style="padding: 16px;">
+            <h2 style="margin: 0 0 8px 0; font-size: 16px; font-family: Arial, Helvetica, sans-serif; font-weight: bold; text-transform: uppercase;">
+              System Gateway Login
+            </h2>
+            <p style="margin: 0 0 12px 0; font-size: 12px; line-height: 1.3;">
+              Enter security passcode to unlock terminal session.
+            </p>
+
+            <hr size="2" color="#808080" style="margin: 12px 0; border: none; border-top: 1px solid #808080; border-bottom: 1px solid #FFFFFF;" />
+
+            <form onsubmit="event.preventDefault(); validateAccessCode();" style="margin: 0;">
+              <table border="0" cellpadding="4" cellspacing="0" width="100%">
+                <tr>
+                  <td width="30%" align="right" style="font-size: 12px; font-weight: bold;">
+                    PASSCODE:
+                  </td>
+                  <td width="70%">
+                    <div style="display: flex; align-items: center; background: #FFFFFF; border: 2px inset #808080;">
+                      <input type="password" id="access-input" autocomplete="off" spellcheck="false" style="width: 100%; padding: 4px; border: none; background: transparent; font-family: 'Courier New', Courier, monospace; font-size: 13px; color: #000000; outline: none; border-radius: 0px !important;" />
+                      <button type="button" onclick="togglePasscodeVisibility()" style="background: #C0C0C0; border: 1px outset #FFFFFF; padding: 2px 6px; cursor: pointer; border-radius: 0px !important;" title="Toggle Visibility">
+                        <i id="eye-icon" class="fa-solid fa-eye" style="font-size: 11px; color: #000000;"></i>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan="2" align="right" style="padding-top: 12px;">
+                    <input type="submit" value="[ ENTER SYSTEM ]" style="background: #C0C0C0; color: #000000; border: 2px outset #FFFFFF; padding: 4px 12px; font-family: Arial, Helvetica, sans-serif; font-size: 12px; font-weight: bold; cursor: pointer; border-radius: 0px !important;" />
+                  </td>
+                </tr>
+              </table>
+            </form>
+
+            <p id="access-error" style="color: #FF0000; font-size: 12px; font-weight: bold; margin-top: 12px; margin-bottom: 0; text-align: center; display: none;">
+              ERROR: INVALID PASSCODE SUPPLIED.
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td align="right" bgcolor="#CCCCCC" style="font-size: 10px; color: #555555; border-top: 1px solid #808080; padding: 4px 8px;">
+            SECURE PROTOCOL V1.04
+          </td>
+        </tr>
+      </table>
     </div>
-  );
-}
 
-function FilesAppContent({ filePath, setFilePath, openApp }) {
-  return (
-    <div className="flex flex-col h-full">
-      <div className="flex gap-2 p-2 bg-gray-50 border-b border-gray-200 items-center">
-        <button 
-          onClick={() => setFilePath('root')} 
-          disabled={filePath === 'root'}
-          className={`px-3 py-1 text-lg rounded ${filePath === 'root' ? 'text-gray-300' : 'hover:bg-gray-200 text-gray-600'}`}
-        >
-          ↑
-        </button>
-        <div className="flex-1 bg-white border border-gray-300 rounded px-2 py-1 text-sm text-gray-600 flex items-center">
-          <span className="text-gray-400 mr-1">💻</span> 
-          This PC {'>'} Local Disk (C:) {'>'} {filePath === 'importent' ? 'importent' : ''}
-        </div>
-      </div>
+  </div>
 
-      <div className="flex flex-wrap gap-4 p-4">
-        {filePath === 'root' && (
-          <>
-            <div className="flex flex-col items-center cursor-default hover:bg-blue-50 border border-transparent hover:border-blue-200 p-2 rounded w-24">
-              <span className="text-4xl mb-1">📁</span>
-              <span className="text-xs text-center text-gray-800">Program Files</span>
-            </div>
-            <div className="flex flex-col items-center cursor-default hover:bg-blue-50 border border-transparent hover:border-blue-200 p-2 rounded w-24">
-              <span className="text-4xl mb-1">📁</span>
-              <span className="text-xs text-center text-gray-800">Users</span>
-            </div>
-            <div 
-              onDoubleClick={() => setFilePath('importent')} 
-              className="flex flex-col items-center cursor-default hover:bg-blue-50 border border-transparent hover:border-blue-200 p-2 rounded w-24"
-            >
-              <span className="text-4xl mb-1">📁</span>
-              <span className="text-xs text-center text-gray-800">importent</span>
-            </div>
-          </>
-        )}
+  <script>
+    function togglePasscodeVisibility() {
+      const input = document.getElementById("access-input");
+      const icon = document.getElementById("eye-icon");
 
-        {filePath === 'importent' && (
-          <div 
-            onDoubleClick={() => openApp('passwords')} 
-            className="flex flex-col items-center cursor-default hover:bg-blue-50 border border-transparent hover:border-blue-200 p-2 rounded w-24"
-          >
-            <span className="text-4xl mb-1">🔑</span>
-            <span className="text-xs text-center text-gray-800 line-clamp-2">Vault.exe</span>
-          </div>
-        )}
-      </div>
-    </div>
-  );
-}
+      if (input.type === "password") {
+        input.type = "text";
+        icon.classList.remove("fa-eye");
+        icon.classList.add("fa-eye-slash");
+      } else {
+        input.type = "password";
+        icon.classList.remove("fa-eye-slash");
+        icon.classList.add("fa-eye");
+      }
+    }
+
+    /* ---------- Desktop / gate state management ---------- */
+    function showDesktop() {
+      document.getElementById("win7-desktop").style.display = "block";
+      document.getElementById("exe-loader").style.display = "none";
+      document.getElementById("access-gate").style.display = "none";
+      document.getElementById("win7-start-menu").style.display = "none";
+    }
+
+    function checkAccessCode() {
+      const isAuth = sessionStorage.getItem("interstellar_authenticated");
+      const lockBtn = document.getElementById("lock-button");
+
+      if (isAuth === "true") {
+        document.getElementById("win7-desktop").style.display = "none";
+        document.getElementById("exe-loader").style.display = "none";
+        document.getElementById("access-gate").style.display = "none";
+        if (lockBtn) lockBtn.style.display = "block";
+      } else {
+        if (lockBtn) lockBtn.style.display = "none";
+        showDesktop();
+      }
+    }
+
+    function launchExe() {
+      document.getElementById("win7-start-menu").style.display = "none";
+      document.getElementById("win7-desktop").style.display = "none";
+      document.getElementById("exe-loader").style.display = "flex";
+
+      setTimeout(() => {
+        document.getElementById("exe-loader").style.display = "none";
+        document.getElementById("access-gate").style.display = "flex";
+      }, 1400);
+    }
+
+    function selectIcon(el) {
+      document.querySelectorAll(".win7-icon").forEach(i => i.classList.remove("selected"));
+      el.classList.add("selected");
+    }
+
+    function deselectIcons() {
+      document.querySelectorAll(".win7-icon").forEach(i => i.classList.remove("selected"));
+    }
+
+    function toggleStartMenu() {
+      const menu = document.getElementById("win7-start-menu");
+      menu.style.display = menu.style.display === "block" ? "none" : "block";
+    }
+
+    function updateWin7Clock() {
+      const timeEl = document.getElementById("win7-clock-time");
+      const dateEl = document.getElementById("win7-clock-date");
+      if (!timeEl) return;
+      const now = new Date();
+      let h = now.getHours();
+      const m = String(now.getMinutes()).padStart(2, "0");
+      const ampm = h >= 12 ? "PM" : "AM";
+      h = h % 12; if (h === 0) h = 12;
+      timeEl.textContent = `${h}:${m} ${ampm}`;
+      if (dateEl) dateEl.textContent = now.toLocaleDateString();
+    }
+    updateWin7Clock();
+    setInterval(updateWin7Clock, 1000);
+
+    async function validateAccessCode() {
+      const inputVal = document.getElementById("access-input").value;
+      const errorEl = document.getElementById("access-error");
+
+      try {
+        const response = await fetch('/api/verify-access', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ code: inputVal })
+        });
+
+        const data = await response.json();
+
+        if (response.ok && data.success) {
+          sessionStorage.setItem("interstellar_authenticated", "true");
+          checkAccessCode();
+        } else {
+          errorEl.textContent = data.message || "ERROR: INVALID PASSCODE SUPPLIED.";
+          errorEl.style.display = "block";
+        }
+      } catch (err) {
+        errorEl.textContent = "ERROR: SERVER CONNECTION FAILED.";
+        errorEl.style.display = "block";
+      }
+    }
+
+    function lockOut() {
+      sessionStorage.removeItem("interstellar_authenticated");
+      document.getElementById("access-input").value = "";
+      checkAccessCode();
+    }
+
+    checkAccessCode();
+  </script>
+
+  <!-- DO NOT REMOVE-->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-WKJQ5QHQTJ"></script>
+  <script>
+    window.dataLayer = window.dataLayer || []
+    function gtag() {
+      dataLayer.push(arguments)
+    }
+    gtag("js", new Date())
+
+    gtag("config", "G-WKJQ5QHQTJ")
+  </script>
+  <!-- DO NOT REMOVE-->
+</body>
+
+</html>
