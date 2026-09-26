@@ -17,6 +17,11 @@
 </head>
 
 <body class="center" onload="SplashT">
+  <!-- MANUAL LOCKOUT BUTTON (Visible when unlocked) -->
+  <button id="lock-button" onclick="lockOut()" style="position: fixed; top: 15px; right: 20px; z-index: 99998; display: none; align-items: center; gap: 8px; background: #1f2937; border: 1px solid #374151; color: #f3f4f6; padding: 8px 14px; border-radius: 6px; font-weight: 600; font-size: 0.875rem; cursor: pointer; transition: background 0.2s;">
+    <i class="fa-solid fa-lock"></i> Lock Proxy
+  </button>
+
   <div class="nav-bar"></div>
   <div class="main">
     <h1 class="title">&#73;&#110;&#116;&#101;&#114;&#115;&#116;&#101;&#108;&#108;&#97;&#114;</h1>
@@ -35,29 +40,60 @@
   <script src="/assets/scramjet/scramjet.all.js"></script>
   <script src="/assets/scramjet/scramjet.config.js"></script>
 
-  <!-- ACCESS CODE GATE OVERLAY -->
-  <div id="access-gate" style="position: fixed; inset: 0; background: #0b0e14; display: flex; align-items: center; justify-content: center; z-index: 999999; font-family: system-ui, -apple-system, sans-serif;">
-    <div style="background: #151921; border: 1px solid #2a303c; border-radius: 12px; padding: 2rem; width: 90%; max-width: 360px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.5);">
-      <h2 style="color: #ffffff; margin: 0 0 0.5rem 0; font-size: 1.5rem;">Access Required</h2>
-      <p style="color: #9ba3af; font-size: 0.875rem; margin: 0 0 1.5rem 0;">Enter the passcode to access Interstellar.</p>
-      <form onsubmit="event.preventDefault(); validateAccessCode();">
-        <input type="password" id="access-input" placeholder="Enter Passcode" style="width: 100%; padding: 0.75rem; border-radius: 8px; border: 1px solid #2a303c; background: #0b0e14; color: #fff; font-size: 1rem; margin-bottom: 1rem; box-sizing: border-box; outline: none;" />
-        <button type="submit" style="width: 100%; padding: 0.75rem; border-radius: 8px; border: none; background: #6366f1; color: #ffffff; font-weight: 600; font-size: 1rem; cursor: pointer;">Unlock Proxy</button>
+  <!-- WAYBACK MACHINE ACCESS GATE OVERLAY -->
+  <div id="access-gate" style="position: fixed; inset: 0; background: #111111; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 99999; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #ffffff;">
+    
+    <!-- Wayback Machine Header Banner -->
+    <div style="width: 100%; max-width: 640px; background: #2c2c2c; border: 1px solid #3a3a3a; border-bottom: 3px solid #ffbc00; border-radius: 8px 8px 0 0; padding: 16px 24px; box-sizing: border-box; display: flex; align-items: center; justify-content: space-between;">
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <i class="fa-solid fa-building-columns" style="color: #ffbc00; font-size: 1.6rem;"></i>
+        <div>
+          <span style="font-family: Georgia, serif; font-weight: bold; font-size: 1.15rem; letter-spacing: 0.5px; color: #ffffff;">INTERNET ARCHIVE</span>
+          <span style="font-size: 1rem; color: #aaaaaa; margin-left: 6px; font-weight: 300;">Wayback Machine</span>
+        </div>
+      </div>
+      <span style="font-size: 0.75rem; color: #888; background: #1a1a1a; padding: 4px 8px; border-radius: 4px; border: 1px solid #333;">http://web.archive.org/</span>
+    </div>
+
+    <!-- Wayback Machine Archival Search Box Container -->
+    <div style="width: 100%; max-width: 640px; background: #222222; border: 1px solid #3a3a3a; border-top: none; border-radius: 0 0 8px 8px; padding: 32px 28px; box-sizing: border-box; text-align: center; box-shadow: 0 12px 30px rgba(0,0,0,0.7);">
+      <h3 style="margin: 0 0 8px 0; font-weight: 400; font-size: 1.25rem; color: #ffffff;">Archived Snapshot Verification</h3>
+      <p style="margin: 0 0 24px 0; color: #a0a0a0; font-size: 0.875rem;">Enter security passcode to load this archived site version.</p>
+
+      <form onsubmit="event.preventDefault(); validateAccessCode();" style="display: flex; flex-direction: column; gap: 12px; max-width: 480px; margin: 0 auto;">
+        <div style="display: flex; background: #0d0d0d; border: 1px solid #444; border-radius: 4px; overflow: hidden;">
+          <span style="background: #1a1a1a; color: #ffbc00; padding: 12px; font-size: 0.9rem; font-family: monospace; border-right: 1px solid #333; display: flex; align-items: center;">passcode://</span>
+          <input type="password" id="access-input" placeholder="Enter Access Code" style="flex: 1; padding: 12px; background: transparent; border: none; color: #fff; font-size: 1rem; outline: none;" />
+        </div>
+        
+        <button type="submit" style="background: #006699; hover:background: #005580; color: #ffffff; border: none; border-radius: 4px; padding: 12px; font-weight: bold; font-size: 0.95rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: background 0.2s;">
+          <i class="fa-solid fa-clock-rotate-left"></i> TAKE ME BACK
+        </button>
       </form>
-      <p id="access-error" style="color: #ef4444; font-size: 0.85rem; margin-top: 0.75rem; margin-bottom: 0; display: none;">Incorrect passcode. Please try again.</p>
+
+      <p id="access-error" style="color: #ff5555; font-size: 0.85rem; margin-top: 16px; margin-bottom: 0; display: none;">
+        Bummer! Passcode mismatch. Snapshot locked.
+      </p>
     </div>
   </div>
 
   <script>
-    async function checkAccessCode() {
-      const isAuth = localStorage.getItem("interstellar_authenticated");
+    // Check authentication using sessionStorage (clears automatically when tab is closed)
+    function checkAccessCode() {
+      const isAuth = sessionStorage.getItem("interstellar_authenticated");
+      const accessGate = document.getElementById("access-gate");
+      const lockBtn = document.getElementById("lock-button");
+
       if (isAuth === "true") {
-        document.getElementById("access-gate").style.display = "none";
+        accessGate.style.display = "none";
+        if (lockBtn) lockBtn.style.display = "flex";
       } else {
-        document.getElementById("access-gate").style.display = "flex";
+        accessGate.style.display = "flex";
+        if (lockBtn) lockBtn.style.display = "none";
       }
     }
 
+    // Verify code with backend API
     async function validateAccessCode() {
       const inputVal = document.getElementById("access-input").value;
       const errorEl = document.getElementById("access-error");
@@ -72,19 +108,27 @@
         const data = await response.json();
 
         if (response.ok && data.success) {
-          localStorage.setItem("interstellar_authenticated", "true");
-          document.getElementById("access-gate").style.display = "none";
+          // Set in sessionStorage so closing the tab automatically logs out
+          sessionStorage.setItem("interstellar_authenticated", "true");
+          checkAccessCode();
         } else {
-          errorEl.textContent = data.message || "Incorrect passcode. Please try again.";
+          errorEl.textContent = data.message || "Bummer! Passcode mismatch. Snapshot locked.";
           errorEl.style.display = "block";
         }
       } catch (err) {
-        errorEl.textContent = "Server verification failed. Please try again.";
+        errorEl.textContent = "Archive server connection failed. Try again.";
         errorEl.style.display = "block";
       }
     }
 
-    // Run authentication check on initial page load
+    // Manual lockout action
+    function lockOut() {
+      sessionStorage.removeItem("interstellar_authenticated");
+      document.getElementById("access-input").value = "";
+      checkAccessCode();
+    }
+
+    // Run check on initial load
     checkAccessCode();
   </script>
 
