@@ -64,76 +64,378 @@
       pointer-events: none !important;
     }
 
-    /* VINTAGE LAPTOP OS & DESKTOP STYLING */
-    * {
-      border-radius: 0px !important;
-      box-shadow: none !important;
-      transition: none !important;
+    /* WINDOWS 7 AERO THEME STYLES */
+    :root {
+      --win7-glass-bg: rgba(210, 230, 250, 0.45);
+      --win7-glass-border: rgba(255, 255, 255, 0.6);
+      --win7-window-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.5) inset;
     }
 
-    .retro-btn {
-      background: #C0C0C0;
-      color: #000000;
-      border-top: 2px solid #FFFFFF;
-      border-left: 2px solid #FFFFFF;
-      border-right: 2px solid #000000;
-      border-bottom: 2px solid #000000;
-      font-family: Arial, Helvetica, sans-serif;
-      font-size: 11px;
-      font-weight: bold;
-      cursor: pointer;
-      padding: 2px 6px;
-    }
-
-    .retro-btn:active {
-      border-top: 2px solid #000000;
-      border-left: 2px solid #000000;
-      border-right: 2px solid #FFFFFF;
-      border-bottom: 2px solid #FFFFFF;
-    }
-
-    .desktop-icon {
-      width: 80px;
-      text-align: center;
-      color: #FFFFFF;
-      font-family: Arial, Helvetica, sans-serif;
-      font-size: 11px;
-      cursor: pointer;
-      padding: 6px;
-      margin-bottom: 12px;
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
       user-select: none;
     }
 
-    .desktop-icon:hover, .desktop-icon:focus {
-      background-color: #000080;
-      outline: 1px dotted #FFFFFF;
-    }
-
-    .desktop-icon i {
-      font-size: 32px;
-      margin-bottom: 4px;
-      display: block;
-    }
-
-    .window-title-bar {
-      background: #000080;
-      color: #FFFFFF;
-      padding: 3px 6px;
-      font-family: Arial, Helvetica, sans-serif;
-      font-weight: bold;
-      font-size: 12px;
+    /* Windows 7 Desktop Background */
+    #access-gate {
+      position: fixed;
+      inset: 0;
+      z-index: 99999;
+      background: radial-gradient(circle at 50% 30%, #2e71b8 0%, #153860 60%, #09182d 100%);
       display: flex;
+      flex-direction: column;
       justify-content: space-between;
+      overflow: hidden;
+    }
+
+    /* Background Ribbon Effect */
+    #access-gate::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: 
+        radial-gradient(ellipse at 20% 80%, rgba(110, 190, 255, 0.25) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 20%, rgba(0, 220, 255, 0.15) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    /* Desktop Icon Grid */
+    .desktop-area {
+      flex: 1;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      flex-wrap: wrap;
+      align-content: flex-start;
+      gap: 12px;
+      position: relative;
+    }
+
+    .win7-icon {
+      width: 82px;
+      padding: 8px 4px;
+      display: flex;
+      flex-direction: column;
       align-items: center;
-      user-select: none;
+      text-align: center;
+      color: #ffffff;
+      font-size: 11px;
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
+      border: 1px solid transparent;
+      border-radius: 3px;
+      cursor: pointer;
+    }
+
+    .win7-icon:hover {
+      background: rgba(255, 255, 255, 0.18);
+      border-color: rgba(255, 255, 255, 0.35);
+      box-shadow: 0 0 8px rgba(255, 255, 255, 0.2) inset;
+    }
+
+    .win7-icon i {
+      font-size: 34px;
+      margin-bottom: 6px;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+    }
+
+    /* Generic Aero Window Frame */
+    .aero-window {
+      position: absolute;
+      background: rgba(235, 242, 250, 0.85);
+      backdrop-filter: blur(12px);
+      border-radius: 8px 8px 4px 4px;
+      border: 1px solid var(--win7-glass-border);
+      box-shadow: var(--win7-window-shadow);
+      display: flex;
+      flex-direction: column;
+      min-width: 320px;
+      overflow: hidden;
+    }
+
+    /* Aero Glass Title Bar */
+    .aero-titlebar {
+      height: 32px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.6) 0%, rgba(210,230,250,0.3) 40%, rgba(150,190,230,0.4) 50%, rgba(180,215,250,0.5) 100%);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 8px;
+      cursor: move;
+    }
+
+    .aero-title-text {
+      font-size: 12px;
+      font-weight: 600;
+      color: #1e293b;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      text-shadow: 0 0 6px rgba(255,255,255,0.8);
+    }
+
+    .aero-controls {
+      display: flex;
+      align-items: center;
+      gap: 1px;
+    }
+
+    .aero-btn-ctrl {
+      width: 26px;
+      height: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      border-radius: 3px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.7) 0%, rgba(200,215,235,0.5) 100%);
+      color: #333;
+      font-size: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    }
+
+    .aero-btn-ctrl:hover {
+      background: linear-gradient(180deg, rgba(255,255,255,0.9) 0%, rgba(220,235,255,0.8) 100%);
+    }
+
+    .aero-btn-ctrl.close-btn:hover {
+      background: linear-gradient(180deg, #f87171 0%, #dc2626 100%);
+      color: #ffffff;
+      border-color: #ef4444;
+    }
+
+    .aero-body {
+      background: #f8fafc;
+      padding: 12px;
+      flex: 1;
+      font-size: 12px;
+      color: #1e293b;
+    }
+
+    /* Windows 7 Taskbar */
+    .win7-taskbar {
+      height: 40px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.3) 0%, rgba(180,210,240,0.2) 10%, rgba(20,50,90,0.6) 20%, rgba(10,30,60,0.8) 100%);
+      backdrop-filter: blur(16px);
+      border-top: 1px solid rgba(255, 255, 255, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 4px;
+      z-index: 1000000;
+    }
+
+    /* Start Orb */
+    .start-orb {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #60a5fa 0%, #1d4ed8 50%, #1e3a8a 100%);
+      border: 2px solid rgba(255, 255, 255, 0.8);
+      box-shadow: 0 0 10px rgba(59, 130, 246, 0.6), 0 2px 4px rgba(0,0,0,0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: #ffffff;
+      font-size: 16px;
+      margin-right: 8px;
+    }
+
+    .start-orb:hover {
+      box-shadow: 0 0 15px rgba(147, 197, 253, 0.9), 0 0 5px rgba(255, 255, 255, 0.8) inset;
+    }
+
+    .taskbar-items {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      flex: 1;
+    }
+
+    .taskbar-button {
+      height: 32px;
+      padding: 0 10px;
+      border-radius: 4px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.1) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      color: #ffffff;
+      font-size: 11px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.8);
+    }
+
+    .taskbar-button.active {
+      background: linear-gradient(180deg, rgba(255,255,255,0.5) 0%, rgba(180,220,255,0.3) 100%);
+      border-color: rgba(255, 255, 255, 0.6);
+      box-shadow: 0 0 8px rgba(255,255,255,0.4) inset;
+    }
+
+    .system-tray {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #ffffff;
+      font-size: 11px;
+      padding: 0 8px;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.8);
+      border-left: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    /* Win7 Start Menu */
+    .win7-start-menu {
+      position: absolute;
+      bottom: 44px;
+      left: 4px;
+      width: 380px;
+      height: 420px;
+      background: rgba(230, 240, 250, 0.92);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.7);
+      border-radius: 8px 8px 0 0;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      display: none;
+      flex-direction: column;
+      z-index: 999999;
+      overflow: hidden;
+    }
+
+    .start-menu-body {
+      display: flex;
+      flex: 1;
+      padding: 6px;
+      gap: 6px;
+    }
+
+    .start-left {
+      flex: 1.2;
+      background: #ffffff;
+      border-radius: 4px;
+      padding: 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      box-shadow: 0 0 2px rgba(0,0,0,0.2) inset;
+    }
+
+    .start-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 8px;
+      border-radius: 3px;
+      font-size: 12px;
+      color: #1e293b;
+      cursor: pointer;
+    }
+
+    .start-item:hover {
+      background: linear-gradient(180deg, #e0f2fe 0%, #bae6fd 100%);
+      border: 1px solid #7dd3fc;
+    }
+
+    .start-right {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      padding: 6px;
+      font-size: 11px;
+    }
+
+    .start-right-item {
+      padding: 4px 8px;
+      color: #1e3a8a;
+      font-weight: 600;
+      cursor: pointer;
+      border-radius: 3px;
+    }
+
+    .start-right-item:hover {
+      background: rgba(255, 255, 255, 0.5);
+    }
+
+    .start-menu-footer {
+      height: 40px;
+      background: linear-gradient(180deg, rgba(210,230,250,0.6) 0%, rgba(180,210,240,0.8) 100%);
+      border-top: 1px solid rgba(255,255,255,0.5);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 10px;
+    }
+
+    /* UI Inputs & Buttons */
+    .win7-input {
+      width: 100%;
+      padding: 5px 8px;
+      border: 1px solid #94a3b8;
+      border-radius: 2px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.1) inset;
+      outline: none;
+      font-size: 12px;
+    }
+
+    .win7-input:focus {
+      border-color: #3b82f6;
+      box-shadow: 0 0 4px rgba(59, 130, 246, 0.5);
+    }
+
+    .win7-btn {
+      padding: 4px 14px;
+      background: linear-gradient(180deg, #ffffff 0%, #e2e8f0 100%);
+      border: 1px solid #94a3b8;
+      border-radius: 3px;
+      font-size: 11px;
+      font-weight: 600;
+      color: #1e293b;
+      cursor: pointer;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    }
+
+    .win7-btn:hover {
+      background: linear-gradient(180deg, #f1f5f9 0%, #cbd5e1 100%);
+      border-color: #64748b;
+    }
+
+    .win7-btn-primary {
+      background: linear-gradient(180deg, #60a5fa 0%, #2563eb 100%);
+      color: #ffffff;
+      border-color: #1d4ed8;
+    }
+
+    .win7-btn-primary:hover {
+      background: linear-gradient(180deg, #3b82f6 0%, #1d4ed8 100%);
+    }
+
+    /* Progress bar styling */
+    .progress-bar-bg {
+      height: 12px;
+      background: #e2e8f0;
+      border-radius: 6px;
+      overflow: hidden;
+      border: 1px solid #cbd5e1;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(180deg, #4ade80 0%, #16a34a 100%);
+      width: 35%;
     }
   </style>
 </head>
 
-<body class="center" onload="SplashT" style="background-color: #CCCCCC;">
+<body class="center" onload="SplashT">
   <!-- LOCKOUT BUTTON -->
-  <button id="lock-button" onclick="lockOut()" class="retro-btn" style="position: fixed; top: 10px; right: 10px; z-index: 99998; display: none;">
-    [ LOCK SESSION ]
+  <button id="lock-button" onclick="lockOut()" class="win7-btn" style="position: fixed; top: 10px; right: 10px; z-index: 99998; display: none;">
+    <i class="fa-solid fa-lock"></i> Lock Session
   </button>
 
   <div class="nav-bar"></div>
@@ -154,145 +456,252 @@
   <script src="/assets/scramjet/scramjet.all.js"></script>
   <script src="/assets/scramjet/scramjet.config.js"></script>
 
-  <!-- VINTAGE LAPTOP OS DESKTOP GATE OVERLAY -->
-  <div id="access-gate" style="position: fixed; inset: 0; background-color: #008080; z-index: 99999; font-family: Arial, Helvetica, sans-serif; color: #000000; display: flex; flex-direction: column; justify-content: space-between;">
+  <!-- WINDOWS 7 AERO DESKTOP OVERLAY -->
+  <div id="access-gate">
     
-    <!-- DESKTOP WORKSPACE & ICONS -->
-    <div style="padding: 16px; flex: 1; position: relative;">
+    <!-- DESKTOP AREA & ICONS -->
+    <div class="desktop-area" onclick="closeStartMenu()">
       
-      <!-- Desktop Icons Column -->
-      <div style="display: flex; flex-direction: column; align-items: flex-start;">
-        
-        <!-- My Computer -->
-        <div class="desktop-icon" tabindex="0">
-          <i class="fa-solid fa-desktop" style="color: #C0C0C0;"></i>
-          <span>My Computer</span>
-        </div>
-
-        <!-- Network Neighborhood -->
-        <div class="desktop-icon" tabindex="0">
-          <i class="fa-solid fa-network-wired" style="color: #00FFFF;"></i>
-          <span>Network</span>
-        </div>
-
-        <!-- Recycle Bin -->
-        <div class="desktop-icon" tabindex="0">
-          <i class="fa-solid fa-trash-can" style="color: #C0C0C0;"></i>
-          <span>Recycle Bin</span>
-        </div>
-
-        <!-- EXECUTABLE APP ICON FOR PASSWORD -->
-        <div class="desktop-icon" id="password-exe-icon" onclick="openPasswordApp()" ondblclick="openPasswordApp()" tabindex="0" style="outline: 1px dashed #FFFF00;">
-          <i class="fa-solid fa-file-code" style="color: #FFD700;"></i>
-          <span style="background: #000000; color: #00FF00; padding: 1px 2px; font-family: 'Courier New', Courier, monospace; font-weight: bold;">password.exe</span>
-        </div>
-
+      <!-- Computer -->
+      <div class="win7-icon" onclick="openWindow('win-computer')">
+        <i class="fa-solid fa-desktop" style="color: #60a5fa;"></i>
+        <span>Computer</span>
       </div>
 
-      <!-- PASSWORD APP WINDOW (EXPLICIT APPLICATION INTERFACE) -->
-      <div id="password-app-window" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 380px; background-color: #C0C0C0; border-top: 2px solid #FFFFFF; border-left: 2px solid #FFFFFF; border-right: 2px solid #000000; border-bottom: 2px solid #000000; display: none;">
-        
-        <!-- Title Bar -->
-        <div class="window-title-bar">
-          <div style="display: flex; align-items: center; gap: 6px;">
-            <i class="fa-solid fa-key" style="font-size: 11px;"></i>
-            <span>C:\SYSTEM\password.exe</span>
-          </div>
-          <div style="display: flex; gap: 2px;">
-            <button class="retro-btn" onclick="closePasswordApp()" style="padding: 0 4px; font-size: 10px; line-height: 12px; height: 16px; width: 16px; text-align: center;">X</button>
-          </div>
-        </div>
+      <!-- Network -->
+      <div class="win7-icon" onclick="openWindow('win-network')">
+        <i class="fa-solid fa-network-wired" style="color: #38bdf8;"></i>
+        <span>Network</span>
+      </div>
 
-        <!-- App Window Content Area -->
-        <div style="padding: 12px;">
-          <table border="2" cellpadding="8" cellspacing="0" width="100%" bgcolor="#C0C0C0" style="border-style: inset; border-color: #808080 #FFFFFF #FFFFFF #808080;">
-            <tr>
-              <td bgcolor="#000080" align="center" style="color: #FFFFFF; font-weight: bold; font-size: 12px;">
-                SECURITY AUTHENTICATION EXECUTABLE
-              </td>
-            </tr>
-            <tr>
-              <td bgcolor="#FFFFFF" align="center" style="border: 2px inset #808080; font-family: 'Courier New', Courier, monospace; font-size: 11px; color: #FF0000; font-weight: bold;">
-                [ATTENTION: SYSTEM LOCKED]
-              </td>
-            </tr>
-            <tr>
-              <td style="font-size: 11px;">
-                <p style="margin: 0 0 8px 0; font-family: 'Courier New', Courier, monospace;">
-                  Executing password.exe...<br>
-                  Please enter authorization passcode:
-                </p>
+      <!-- Recycle Bin -->
+      <div class="win7-icon" id="recycle-desktop-icon" onclick="openWindow('win-recycle')">
+        <i class="fa-solid fa-trash-can" style="color: #cbd5e1;"></i>
+        <span>Recycle Bin</span>
+      </div>
 
-                <hr size="2" color="#808080" style="margin: 8px 0; border: none; border-top: 1px solid #808080; border-bottom: 1px solid #FFFFFF;" />
-
-                <form onsubmit="event.preventDefault(); validateAccessCode();" style="margin: 0;">
-                  <table border="0" cellpadding="2" cellspacing="0" width="100%">
-                    <tr>
-                      <td width="35%" align="right" style="font-size: 11px; font-weight: bold; font-family: 'Courier New', Courier, monospace;">
-                        PASSCODE:
-                      </td>
-                      <td width="65%">
-                        <div style="display: flex; align-items: center; background: #FFFFFF; border: 2px inset #808080;">
-                          <input type="password" id="access-input" autocomplete="off" spellcheck="false" style="width: 100%; padding: 3px; border: none; background: transparent; font-family: 'Courier New', Courier, monospace; font-size: 12px; color: #000000; outline: none;" />
-                          <button type="button" onclick="togglePasscodeVisibility()" class="retro-btn" style="padding: 1px 4px;" title="Toggle Password">
-                            <i id="eye-icon" class="fa-solid fa-eye" style="font-size: 10px;"></i>
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td colspan="2" align="right" style="padding-top: 10px;">
-                        <input type="submit" value="RUN / LOGIN" class="retro-btn" style="padding: 4px 12px;" />
-                        <button type="button" class="retro-btn" onclick="closePasswordApp()" style="padding: 4px 10px; margin-left: 4px;">CANCEL</button>
-                      </td>
-                    </tr>
-                  </table>
-                </form>
-
-                <p id="access-error" style="color: #FF0000; font-size: 11px; font-weight: bold; margin-top: 10px; margin-bottom: 0; text-align: center; font-family: 'Courier New', Courier, monospace; display: none;">
-                  ERROR: INVALID PASSCODE SUPPLIED.
-                </p>
-              </td>
-            </tr>
-          </table>
-        </div>
-
-        <!-- Status Bar -->
-        <div style="border-top: 1px solid #808080; background: #C0C0C0; padding: 2px 6px; font-size: 10px; color: #404040; font-family: 'Courier New', Courier, monospace;">
-          Status: Executable running...
-        </div>
-
+      <!-- password.exe -->
+      <div class="win7-icon" onclick="openWindow('win-password')" style="background: rgba(59, 130, 246, 0.25); border-color: rgba(147, 197, 253, 0.6);">
+        <i class="fa-solid fa-shield-halved" style="color: #facc15;"></i>
+        <span>password.exe</span>
       </div>
 
     </div>
 
-    <!-- VINTAGE TASKBAR -->
-    <div style="height: 30px; background-color: #C0C0C0; border-top: 2px solid #FFFFFF; display: flex; align-items: center; justify-content: space-between; padding: 2px 4px; user-select: none;">
-      
-      <!-- Start Button & Active Task Item -->
-      <div style="display: flex; align-items: center; gap: 6px;">
-        <button class="retro-btn" style="display: flex; align-items: center; gap: 4px; padding: 2px 8px; font-weight: bold;">
-          <i class="fa-solid fa-window-restore" style="font-size: 12px;"></i>
-          Start
-        </button>
+    <!-- WINDOW 1: PASSWORD.EXE GATE -->
+    <div id="win-password" class="aero-window" style="width: 380px; top: 120px; left: 320px; z-index: 100001;">
+      <div class="aero-titlebar" onmousedown="dragWindow(event, 'win-password')">
+        <div class="aero-title-text">
+          <i class="fa-solid fa-shield-halved" style="color: #ca8a04;"></i>
+          <span>Security Authentication - password.exe</span>
+        </div>
+        <div class="aero-controls">
+          <div class="aero-btn-ctrl" onclick="minimizeWindow('win-password')">-</div>
+          <div class="aero-btn-ctrl close-btn" onclick="closeWindow('win-password')">✕</div>
+        </div>
+      </div>
+      <div class="aero-body">
+        <div style="background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 4px; padding: 10px; margin-bottom: 12px; display: flex; gap: 10px; align-items: center;">
+          <i class="fa-solid fa-key" style="font-size: 24px; color: #2563eb;"></i>
+          <div>
+            <strong style="color: #1e3a8a;">System Authorization Required</strong>
+            <p style="margin: 2px 0 0 0; font-size: 11px; color: #475569;">Run password.exe with valid credentials to unlock terminal.</p>
+          </div>
+        </div>
 
-        <div id="taskbar-app" onclick="togglePasswordApp()" class="retro-btn" style="display: none; align-items: center; gap: 4px; padding: 2px 8px; background: #E0E0E0; border-top: 2px solid #000000; border-left: 2px solid #000000; border-right: 2px solid #FFFFFF; border-bottom: 2px solid #FFFFFF;">
-          <i class="fa-solid fa-key" style="font-size: 10px;"></i>
-          <span>password.exe</span>
+        <form onsubmit="event.preventDefault(); validateAccessCode();">
+          <div style="margin-bottom: 12px;">
+            <label style="display: block; font-weight: 600; margin-bottom: 4px; font-size: 11px;">PASSCODE:</label>
+            <div style="display: flex; gap: 4px;">
+              <input type="password" id="access-input" class="win7-input" placeholder="Enter authorization key..." autocomplete="off" spellcheck="false" />
+              <button type="button" onclick="togglePasscodeVisibility()" class="win7-btn" title="Show/Hide">
+                <i id="eye-icon" class="fa-solid fa-eye"></i>
+              </button>
+            </div>
+          </div>
+
+          <div style="display: flex; justify-content: flex-end; gap: 6px; margin-top: 16px;">
+            <button type="submit" class="win7-btn win7-btn-primary"><i class="fa-solid fa-check"></i> Unlock</button>
+            <button type="button" class="win7-btn" onclick="closeWindow('win-password')">Cancel</button>
+          </div>
+        </form>
+
+        <p id="access-error" style="color: #dc2626; font-size: 11px; font-weight: bold; margin-top: 10px; margin-bottom: 0; display: none; text-align: center;">
+          Access Denied: Invalid Passcode.
+        </p>
+      </div>
+    </div>
+
+    <!-- WINDOW 2: MY COMPUTER -->
+    <div id="win-computer" class="aero-window" style="width: 440px; top: 80px; left: 100px; display: none; z-index: 100000;">
+      <div class="aero-titlebar" onmousedown="dragWindow(event, 'win-computer')">
+        <div class="aero-title-text">
+          <i class="fa-solid fa-desktop" style="color: #2563eb;"></i>
+          <span>Computer</span>
+        </div>
+        <div class="aero-controls">
+          <div class="aero-btn-ctrl" onclick="minimizeWindow('win-computer')">-</div>
+          <div class="aero-btn-ctrl close-btn" onclick="closeWindow('win-computer')">✕</div>
+        </div>
+      </div>
+      <div class="aero-body">
+        <span style="font-weight: 600; color: #1e3a8a; display: block; margin-bottom: 8px;">Hard Disk Drives (1)</span>
+        
+        <div style="display: flex; align-items: center; gap: 12px; padding: 8px; border: 1px solid #e2e8f0; border-radius: 4px; background: #ffffff; cursor: pointer;" onclick="alert('Local Disk (C:) System Folder: All systems nominal.')">
+          <i class="fa-solid fa-hard-drive" style="font-size: 32px; color: #64748b;"></i>
+          <div style="flex: 1;">
+            <strong>Local Disk (C:)</strong>
+            <div class="progress-bar-bg" style="margin: 4px 0;">
+              <div class="progress-bar-fill"></div>
+            </div>
+            <span style="font-size: 10px; color: #64748b;">75.8 GB free of 118 GB</span>
+          </div>
+        </div>
+
+        <span style="font-weight: 600; color: #1e3a8a; display: block; margin: 14px 0 8px 0;">Devices with Removable Storage (1)</span>
+        <div style="display: flex; align-items: center; gap: 12px; padding: 8px; border: 1px solid #e2e8f0; border-radius: 4px; background: #ffffff;">
+          <i class="fa-solid fa-compact-disc" style="font-size: 32px; color: #94a3b8;"></i>
+          <div>
+            <strong>DVD RW Drive (D:)</strong><br>
+            <span style="font-size: 10px; color: #64748b;">Ready</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WINDOW 3: NETWORK -->
+    <div id="win-network" class="aero-window" style="width: 400px; top: 160px; left: 180px; display: none; z-index: 100000;">
+      <div class="aero-titlebar" onmousedown="dragWindow(event, 'win-network')">
+        <div class="aero-title-text">
+          <i class="fa-solid fa-network-wired" style="color: #0284c7;"></i>
+          <span>Network and Sharing Center</span>
+        </div>
+        <div class="aero-controls">
+          <div class="aero-btn-ctrl" onclick="minimizeWindow('win-network')">-</div>
+          <div class="aero-btn-ctrl close-btn" onclick="closeWindow('win-network')">✕</div>
+        </div>
+      </div>
+      <div class="aero-body">
+        <div style="display: flex; align-items: center; justify-content: space-around; padding: 12px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 4px; text-align: center;">
+          <div>
+            <i class="fa-solid fa-laptop" style="font-size: 24px; color: #475569;"></i><br>
+            <span style="font-size: 10px;">This PC</span>
+          </div>
+          <i class="fa-solid fa-arrow-right-long" style="color: #16a34a;"></i>
+          <div>
+            <i class="fa-solid fa-wifi" style="font-size: 24px; color: #16a34a;"></i><br>
+            <span style="font-size: 10px;">Local Network</span>
+          </div>
+          <i class="fa-solid fa-arrow-right-long" style="color: #16a34a;"></i>
+          <div>
+            <i class="fa-solid fa-globe" style="font-size: 24px; color: #0284c7;"></i><br>
+            <span style="font-size: 10px;">Internet</span>
+          </div>
+        </div>
+
+        <div style="margin-top: 12px; font-size: 11px;">
+          <p style="margin: 4px 0;"><strong>Access type:</strong> Internet</p>
+          <p style="margin: 4px 0;"><strong>Connections:</strong> Local Area Connection (IPv4)</p>
+          <p style="margin: 4px 0;"><strong>IP Address:</strong> 192.168.1.105</p>
+        </div>
+
+        <div style="margin-top: 14px; text-align: right;">
+          <button class="win7-btn" onclick="runDiagnostics()"><i class="fa-solid fa-wrench"></i> Troubleshoot</button>
+        </div>
+        <p id="diag-log" style="font-size: 10px; color: #16a34a; font-weight: bold; margin-top: 6px; display: none;"></p>
+      </div>
+    </div>
+
+    <!-- WINDOW 4: RECYCLE BIN -->
+    <div id="win-recycle" class="aero-window" style="width: 380px; top: 200px; left: 240px; display: none; z-index: 100000;">
+      <div class="aero-titlebar" onmousedown="dragWindow(event, 'win-recycle')">
+        <div class="aero-title-text">
+          <i class="fa-solid fa-trash-can" style="color: #64748b;"></i>
+          <span>Recycle Bin</span>
+        </div>
+        <div class="aero-controls">
+          <div class="aero-btn-ctrl" onclick="minimizeWindow('win-recycle')">-</div>
+          <div class="aero-btn-ctrl close-btn" onclick="closeWindow('win-recycle')">✕</div>
+        </div>
+      </div>
+      <div class="aero-body">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+          <span style="font-weight: 600;">Items in Recycle Bin:</span>
+          <button class="win7-btn" onclick="emptyRecycleBin()"><i class="fa-solid fa-broom"></i> Empty Bin</button>
+        </div>
+
+        <div id="recycle-list" style="background: #ffffff; border: 1px solid #cbd5e1; height: 120px; padding: 6px; overflow-y: auto;">
+          <div class="start-item" style="font-size: 11px;">
+            <i class="fa-solid fa-file-lines" style="color: #64748b;"></i>
+            <span>old_auth_config_backup.log</span>
+          </div>
+          <div class="start-item" style="font-size: 11px;">
+            <i class="fa-solid fa-file-code" style="color: #64748b;"></i>
+            <span>temp_script.sh</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- START MENU -->
+    <div id="start-menu" class="win7-start-menu">
+      <div class="start-menu-body">
+        <div class="start-left">
+          <div class="start-item" onclick="openWindow('win-password')">
+            <i class="fa-solid fa-shield-halved" style="color: #eab308; font-size: 16px;"></i>
+            <span>password.exe</span>
+          </div>
+          <div class="start-item" onclick="openWindow('win-computer')">
+            <i class="fa-solid fa-desktop" style="color: #2563eb; font-size: 16px;"></i>
+            <span>Computer</span>
+          </div>
+          <div class="start-item" onclick="openWindow('win-network')">
+            <i class="fa-solid fa-network-wired" style="color: #0284c7; font-size: 16px;"></i>
+            <span>Network</span>
+          </div>
+          <div class="start-item" onclick="openWindow('win-recycle')">
+            <i class="fa-solid fa-trash-can" style="color: #64748b; font-size: 16px;"></i>
+            <span>Recycle Bin</span>
+          </div>
+        </div>
+        <div class="start-right">
+          <div class="start-right-item" onclick="openWindow('win-computer')">Computer</div>
+          <div class="start-right-item" onclick="openWindow('win-network')">Control Panel</div>
+          <div class="start-right-item" onclick="openWindow('win-network')">Devices and Printers</div>
+          <div class="start-right-item" onclick="alert('Help and Support: Enter passcode in password.exe to proceed.')">Help and Support</div>
+        </div>
+      </div>
+      <div class="start-menu-footer">
+        <div style="font-size: 11px; font-weight: bold; color: #1e293b;">Windows 7 Ultimate</div>
+        <button class="win7-btn" onclick="lockOut()"><i class="fa-solid fa-power-off" style="color: #dc2626;"></i> Shut Down</button>
+      </div>
+    </div>
+
+    <!-- WINDOWS 7 TASKBAR -->
+    <div class="win7-taskbar">
+      <div style="display: flex; align-items: center;">
+        <div class="start-orb" onclick="toggleStartMenu(event)">
+          <i class="fa-brands fa-windows"></i>
+        </div>
+
+        <div class="taskbar-items" id="taskbar-container">
+          <!-- Active Taskbar Buttons rendered dynamically -->
         </div>
       </div>
 
-      <!-- System Tray / Clock -->
-      <div style="border-top: 1px solid #808080; border-left: 1px solid #808080; border-right: 1px solid #FFFFFF; border-bottom: 1px solid #FFFFFF; padding: 2px 8px; background: #C0C0C0; font-size: 11px; font-family: Arial, Helvetica, sans-serif;">
-        <i class="fa-solid fa-volume-high" style="font-size: 10px; margin-right: 6px;"></i>
+      <div class="system-tray">
+        <i class="fa-solid fa-volume-high"></i>
+        <i class="fa-solid fa-wifi"></i>
         <span id="retro-clock">12:00 PM</span>
       </div>
-
     </div>
 
   </div>
 
   <script>
+    let highestZ = 100000;
+
+    // Clock
     function updateClock() {
       const now = new Date();
       let hours = now.getHours();
@@ -305,28 +714,114 @@
     setInterval(updateClock, 1000);
     updateClock();
 
-    function openPasswordApp() {
-      const win = document.getElementById("password-app-window");
-      const taskItem = document.getElementById("taskbar-app");
-      win.style.display = "block";
-      taskItem.style.display = "flex";
-      document.getElementById("access-input").focus();
+    // Start Menu Toggle
+    function toggleStartMenu(e) {
+      if (e) e.stopPropagation();
+      const menu = document.getElementById("start-menu");
+      menu.style.display = menu.style.display === "flex" ? "none" : "flex";
     }
 
-    function closePasswordApp() {
-      const win = document.getElementById("password-app-window");
-      const taskItem = document.getElementById("taskbar-app");
-      win.style.display = "none";
-      taskItem.style.display = "none";
+    function closeStartMenu() {
+      document.getElementById("start-menu").style.display = "none";
     }
 
-    function togglePasswordApp() {
-      const win = document.getElementById("password-app-window");
-      if (win.style.display === "none") {
-        win.style.display = "block";
-      } else {
-        win.style.display = "none";
+    // Window Management
+    function openWindow(winId) {
+      closeStartMenu();
+      const win = document.getElementById(winId);
+      if (win) {
+        win.style.display = "flex";
+        bringToFront(winId);
+        updateTaskbar();
       }
+    }
+
+    function closeWindow(winId) {
+      const win = document.getElementById(winId);
+      if (win) {
+        win.style.display = "none";
+        updateTaskbar();
+      }
+    }
+
+    function minimizeWindow(winId) {
+      closeWindow(winId);
+    }
+
+    function bringToFront(winId) {
+      const win = document.getElementById(winId);
+      if (win) {
+        highestZ++;
+        win.style.zIndex = highestZ;
+      }
+    }
+
+    // Draggable Windows Logic
+    function dragWindow(e, winId) {
+      e = e || window.event;
+      e.preventDefault();
+      bringToFront(winId);
+
+      const win = document.getElementById(winId);
+      let posX = e.clientX;
+      let posY = e.clientY;
+
+      document.onmousemove = function(e) {
+        e = e || window.event;
+        e.preventDefault();
+        let dx = posX - e.clientX;
+        let dy = posY - e.clientY;
+        posX = e.clientX;
+        posY = e.clientY;
+        win.style.top = (win.offsetTop - dy) + "px";
+        win.style.left = (win.offsetLeft - dx) + "px";
+      };
+
+      document.onmouseup = function() {
+        document.onmousemove = null;
+        document.onmouseup = null;
+      };
+    }
+
+    // Dynamic Taskbar Synchronization
+    function updateTaskbar() {
+      const container = document.getElementById("taskbar-container");
+      container.innerHTML = "";
+
+      const windows = [
+        { id: "win-password", title: "password.exe", icon: "fa-shield-halved" },
+        { id: "win-computer", title: "Computer", icon: "fa-desktop" },
+        { id: "win-network", title: "Network", icon: "fa-network-wired" },
+        { id: "win-recycle", title: "Recycle Bin", icon: "fa-trash-can" }
+      ];
+
+      windows.forEach(w => {
+        const el = document.getElementById(w.id);
+        if (el && el.style.display !== "none") {
+          const btn = document.createElement("div");
+          btn.className = "taskbar-button active";
+          btn.innerHTML = `<i class="fa-solid ${w.icon}"></i> <span>${w.title}</span>`;
+          btn.onclick = () => bringToFront(w.id);
+          container.appendChild(btn);
+        }
+      });
+    }
+
+    // App Functionalities
+    function emptyRecycleBin() {
+      document.getElementById("recycle-list").innerHTML = "<p style='font-size: 11px; color: #94a3b8; text-align: center; margin-top: 40px;'>Recycle Bin is empty.</p>";
+      const desktopIcon = document.getElementById("recycle-desktop-icon");
+      if (desktopIcon) {
+        desktopIcon.querySelector("i").className = "fa-regular fa-trash-can";
+      }
+    }
+
+    function runDiagnostics() {
+      const log = document.getElementById("diag-log");
+      log.style.display = "block";
+      log.textContent = "Scanning network interfaces...";
+      setTimeout(() => { log.textContent = "Checking IP configuration..."; }, 1000);
+      setTimeout(() => { log.textContent = "Result: Connection is fully operational."; }, 2000);
     }
 
     function togglePasscodeVisibility() {
@@ -355,6 +850,7 @@
       } else {
         accessGate.style.display = "flex";
         if (lockBtn) lockBtn.style.display = "none";
+        openWindow('win-password');
       }
     }
 
@@ -375,11 +871,11 @@
           sessionStorage.setItem("interstellar_authenticated", "true");
           checkAccessCode();
         } else {
-          errorEl.textContent = data.message || "ERROR: INVALID PASSCODE SUPPLIED.";
+          errorEl.textContent = data.message || "Access Denied: Invalid Passcode.";
           errorEl.style.display = "block";
         }
       } catch (err) {
-        errorEl.textContent = "ERROR: SERVER CONNECTION FAILED.";
+        errorEl.textContent = "Error: Unable to connect to authorization server.";
         errorEl.style.display = "block";
       }
     }
@@ -387,11 +883,12 @@
     function lockOut() {
       sessionStorage.removeItem("interstellar_authenticated");
       document.getElementById("access-input").value = "";
-      closePasswordApp();
       checkAccessCode();
     }
 
+    // Initialize
     checkAccessCode();
+    updateTaskbar();
   </script>
 
   <!-- DO NOT REMOVE-->
