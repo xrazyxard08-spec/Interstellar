@@ -18,8 +18,9 @@
   <!-- TARGETED POPUP / POPUNDER BLOCKER -->
   <script>
     (function() {
-      // Add domains/URLs to block in this list
+      // Domains and URLs targeted for popup interception
       const BLOCKED_DOMAINS = [
+        "undercoverhiking.com",
         "bad-ad-network.com",
         "popunder.xyz",
         "redirect-link.net"
@@ -70,8 +71,8 @@
 
 <body class="center" onload="SplashT">
   <!-- MANUAL LOCKOUT BUTTON -->
-  <button id="lock-button" onclick="lockOut()" style="position: fixed; top: 12px; right: 16px; z-index: 99998; display: none; background: #ffffff; border: 1px solid #cccccc; color: #333333; padding: 6px 12px; border-radius: 4px; font-size: 0.8rem; font-weight: bold; cursor: pointer; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
-    🔒 Lock Session
+  <button id="lock-button" onclick="lockOut()" style="position: fixed; top: 12px; right: 16px; z-index: 99998; display: none; background: #26163b; border: 1px solid #7e52a0; color: #e9d5ff; padding: 6px 12px; border-radius: 4px; font-size: 0.8rem; font-weight: bold; cursor: pointer; box-shadow: 0 1px 4px rgba(0,0,0,0.3);">
+    🔮 Lock Realm
   </button>
 
   <div class="nav-bar"></div>
@@ -92,53 +93,54 @@
   <script src="/assets/scramjet/scramjet.all.js"></script>
   <script src="/assets/scramjet/scramjet.config.js"></script>
 
-  <!-- SIMPLIFIED WAYBACK MACHINE ACCESS GATE -->
-  <div id="access-gate" style="position: fixed; inset: 0; background: #eef2f5; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 99999; font-family: Arial, Helvetica, sans-serif; color: #333333;">
+  <!-- TAROT CARDS ACCESS GATE OVERLAY -->
+  <div id="access-gate" style="position: fixed; inset: 0; background: #0d0814; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 99999; font-family: Arial, Helvetica, sans-serif; color: #f3e8ff;">
     
-    <div style="width: 90%; max-width: 520px; background: #ffffff; border: 1px solid #b4b4b4; border-radius: 4px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+    <div style="width: 90%; max-width: 480px; background: #181024; border: 1px solid #4a3266; border-radius: 6px; overflow: hidden; box-shadow: 0 8px 30px rgba(0, 0, 0, 0.7);">
       
-      <!-- Classic Wayback Header -->
-      <div style="background: #2c2c2c; color: #ffffff; padding: 10px 16px; border-bottom: 3px solid #ffbc00; display: flex; align-items: center; justify-content: space-between;">
-        <div style="font-family: Georgia, serif; font-size: 1.05rem; font-weight: bold;">
-          INTERNET ARCHIVE <span style="font-family: Arial, sans-serif; font-weight: normal; font-size: 0.9rem; color: #cccccc;">Wayback Machine</span>
+      <!-- Tarot Card Header -->
+      <div style="background: #251638; color: #f3e8ff; padding: 12px 18px; border-bottom: 2px solid #d4af37; display: flex; align-items: center; justify-content: space-between;">
+        <div style="font-family: Georgia, serif; font-size: 1.05rem; font-weight: bold; color: #ffd700; letter-spacing: 0.5px; display: flex; align-items: center; gap: 8px;">
+          <i class="fa-solid fa-wand-magic-sparkles" style="color: #d4af37;"></i>
+          TAROT ARCANA
         </div>
-        <span style="font-size: 0.75rem; color: #aaaaaa; font-family: monospace;">web.archive.org</span>
+        <span style="font-size: 0.8rem; color: #c0a0e0; font-family: monospace;">[XIV - TEMPERANCE]</span>
       </div>
 
       <!-- Verification Form -->
-      <div style="padding: 20px;">
-        <h2 style="margin: 0 0 8px 0; font-size: 1.1rem; color: #111111; font-weight: bold; border-bottom: 1px solid #eeeeee; padding-bottom: 6px;">
-          Archived Snapshot Verification
+      <div style="padding: 24px 20px;">
+        <h2 style="margin: 0 0 8px 0; font-size: 1.15rem; color: #ffffff; font-family: Georgia, serif; font-weight: bold; border-bottom: 1px solid #332147; padding-bottom: 8px; display: flex; align-items: center; gap: 8px;">
+          <i class="fa-solid fa-moon" style="color: #d4af37; font-size: 0.95rem;"></i> Arcana Passcode Verification
         </h2>
-        <p style="margin: 0 0 16px 0; font-size: 0.85rem; color: #555555; line-height: 1.4;">
-          This snapshot is protected. Enter passcode to load the archived site.
+        <p style="margin: 0 0 18px 0; font-size: 0.85rem; color: #b3a1c7; line-height: 1.4;">
+          Speak the secret word or enter the card passcode to reveal the path.
         </p>
 
-        <form onsubmit="event.preventDefault(); validateAccessCode();" style="display: flex; flex-direction: column; gap: 10px;">
-          <label style="font-size: 0.75rem; font-weight: bold; color: #444444; text-transform: uppercase;">
-            Passcode:
+        <form onsubmit="event.preventDefault(); validateAccessCode();" style="display: flex; flex-direction: column; gap: 12px;">
+          <label style="font-size: 0.75rem; font-weight: bold; color: #d4af37; text-transform: uppercase; letter-spacing: 0.5px;">
+            Secret Key:
           </label>
           <div style="display: flex; gap: 8px; align-items: center;">
             <!-- Input wrapper with eye toggle button -->
-            <div style="position: relative; flex: 1; display: flex; align-items: center; background: #ffffff; border: 1px solid #888888; border-radius: 3px;">
-              <input type="password" id="access-input" autocomplete="off" spellcheck="false" placeholder="Enter code..." style="flex: 1; padding: 8px 10px; border: none; font-family: monospace; font-size: 1rem; color: #000000; background: transparent; outline: none;" />
-              <button type="button" onclick="togglePasscodeVisibility()" style="background: none; border: none; padding: 8px 10px; cursor: pointer; color: #555555; display: flex; align-items: center;" title="Toggle passcode visibility">
+            <div style="position: relative; flex: 1; display: flex; align-items: center; background: #0f0a17; border: 1px solid #5a3f80; border-radius: 4px;">
+              <input type="password" id="access-input" autocomplete="off" spellcheck="false" placeholder="Enter key..." style="flex: 1; padding: 10px 12px; border: none; font-family: monospace; font-size: 1rem; color: #ffffff; background: transparent; outline: none;" />
+              <button type="button" onclick="togglePasscodeVisibility()" style="background: none; border: none; padding: 8px 12px; cursor: pointer; color: #a88cc4; display: flex; align-items: center;" title="Toggle passcode visibility">
                 <i id="eye-icon" class="fa-solid fa-eye"></i>
               </button>
             </div>
-            <button type="submit" style="background: #006699; color: #ffffff; border: 1px solid #004466; border-radius: 3px; padding: 8px 16px; font-weight: bold; font-size: 0.85rem; cursor: pointer; white-space: nowrap;">
-              TAKE ME BACK
+            <button type="submit" style="background: #6b21a8; color: #ffffff; border: 1px solid #9333ea; border-radius: 4px; padding: 10px 18px; font-weight: bold; font-size: 0.85rem; cursor: pointer; white-space: nowrap; transition: background 0.2s;">
+              REVEAL
             </button>
           </div>
         </form>
 
-        <p id="access-error" style="color: #cc0000; font-size: 0.85rem; margin-top: 12px; margin-bottom: 0; display: none; font-weight: bold;">
-          Invalid passcode. Snapshot locked.
+        <p id="access-error" style="color: #ff6b6b; font-size: 0.85rem; margin-top: 14px; margin-bottom: 0; display: none; font-weight: bold;">
+          The cards remain silent. Invalid key.
         </p>
       </div>
 
-      <div style="background: #f4f4f4; border-top: 1px solid #e5e5e5; padding: 8px 16px; font-size: 0.75rem; color: #777777; text-align: right;">
-        Wayback Machine Security Protocol
+      <div style="background: #120b1c; border-top: 1px solid #2a1a3e; padding: 10px 18px; font-size: 0.75rem; color: #8c73a8; text-align: right; font-style: italic;">
+        Major Arcana Access Protocol
       </div>
 
     </div>
@@ -193,11 +195,11 @@
           sessionStorage.setItem("interstellar_authenticated", "true");
           checkAccessCode();
         } else {
-          errorEl.textContent = data.message || "Invalid passcode. Snapshot locked.";
+          errorEl.textContent = data.message || "The cards remain silent. Invalid key.";
           errorEl.style.display = "block";
         }
       } catch (err) {
-        errorEl.textContent = "Archive server connection failed. Try again.";
+        errorEl.textContent = "Arcana server connection failed. Try again.";
         errorEl.style.display = "block";
       }
     }
