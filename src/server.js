@@ -61,6 +61,21 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// =========================================================================
+// DYNAMIC ACCESS CODE VERIFICATION ENDPOINT
+// Checks against process.env.ACCESS_CODE set in Northflank
+// =========================================================================
+app.post("/api/verify-access", generalLimiter, (req, res) => {
+  const { code } = req.body;
+  const envCode = process.env.ACCESS_CODE || "1234";
+
+  if (code && code === envCode) {
+    return res.json({ success: true });
+  }
+
+  return res.status(401).json({ success: false, message: "Invalid passcode" });
+});
+
 const jsStaticOptions = {
   setHeaders: (res, filePath) => {
     const ext = path.extname(filePath);
@@ -116,9 +131,6 @@ const routes = [
   { path: "/", file: "index.html" },
 ];
 
-// In dist the build randomizes the page routes and records them in the vendor map, so serve each
-// page at its opaque path (build id vendorMap.routes). "/" and "/play.html" have no entry and stay
-// clean. In static/dev vendorMap is null, so the clean routes are used as-is.
 routes.forEach(route => {
   const servePath = vendorMap?.routes?.[route.path] || route.path;
   app.get(servePath, generalLimiter, (_req, res) => {
