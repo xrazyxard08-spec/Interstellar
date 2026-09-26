@@ -69,409 +69,24 @@
       border-radius: 0px !important;
     }
   </style>
-
-  <!-- ===================== WINDOWS 7 DESKTOP THEME ===================== -->
-  <style>
-    * { box-sizing: border-box; }
-
-    #win7-desktop, #exe-loader {
-      position: fixed;
-      inset: 0;
-      z-index: 99990;
-      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-      display: none;
-    }
-
-    /* ---------- Wallpaper ---------- */
-    .win7-bg {
-      position: absolute;
-      inset: 0;
-      background:
-        radial-gradient(ellipse 900px 500px at 25% 15%, rgba(255, 255, 255, 0.18), transparent 60%),
-        radial-gradient(ellipse 1200px 800px at 80% 90%, rgba(120, 200, 255, 0.15), transparent 55%),
-        linear-gradient(150deg, #2a75c7 0%, #14539e 40%, #0c3a72 55%, #082a54 100%);
-    }
-
-    /* ---------- Desktop icons ---------- */
-    .win7-icons {
-      position: absolute;
-      top: 22px;
-      left: 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 24px;
-    }
-
-    .win7-icon {
-      width: 82px;
-      text-align: center;
-      cursor: pointer;
-      user-select: none;
-    }
-
-    .win7-icon .icon-glyph {
-      width: 46px;
-      height: 46px;
-      margin: 0 auto 5px;
-      border-radius: 8px;
-      background: linear-gradient(160deg, #f4f7fb 0%, #cfd9e6 55%, #aeb9c9 100%);
-      border: 1px solid rgba(0, 0, 0, 0.25);
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.8);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 20px;
-      color: #3a5a86;
-    }
-
-    .win7-icon span {
-      display: inline-block;
-      color: #fff;
-      font-size: 12px;
-      line-height: 1.3;
-      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.9);
-      padding: 1px 4px;
-      border-radius: 2px;
-    }
-
-    .win7-icon.selected .icon-glyph {
-      background: linear-gradient(160deg, #dceaff 0%, #a9c8ef 55%, #7fa8d6 100%);
-      outline: 1px dotted rgba(255, 255, 255, 0.8);
-    }
-
-    .win7-icon.selected span {
-      background: rgba(30, 90, 170, 0.6);
-      outline: 1px dotted rgba(255, 255, 255, 0.7);
-    }
-
-    .win7-icon .icon-hint {
-      display: block;
-      font-size: 10px;
-      opacity: 0.85;
-      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.9);
-    }
-
-    /* ---------- Taskbar ---------- */
-    .win7-taskbar {
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      height: 42px;
-      display: flex;
-      align-items: stretch;
-      background: linear-gradient(to bottom, rgba(74, 122, 185, 0.97), rgba(12, 40, 82, 0.97));
-      border-top: 1px solid rgba(255, 255, 255, 0.4);
-      box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.4);
-    }
-
-    .win7-start {
-      width: 58px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      background: radial-gradient(circle at 32% 28%, #9fe272 0%, #4f9a34 55%, #2b5f1c 100%);
-      border-right: 1px solid rgba(0, 0, 0, 0.3);
-      box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.35);
-      color: #143a08;
-      font-size: 18px;
-    }
-
-    .win7-start:hover { filter: brightness(1.12); }
-
-    .win7-taskbar-mid {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      padding-left: 10px;
-      color: rgba(255, 255, 255, 0.55);
-      font-size: 12px;
-      letter-spacing: 0.3px;
-    }
-
-    .win7-tray {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 0 12px;
-      color: #fff;
-      border-left: 1px solid rgba(255, 255, 255, 0.15);
-    }
-
-    .win7-clock {
-      text-align: right;
-      font-size: 12px;
-      line-height: 1.25;
-      color: #fff;
-    }
-
-    /* ---------- Start menu ---------- */
-    .win7-start-menu {
-      display: none;
-      position: absolute;
-      left: 0;
-      bottom: 42px;
-      width: 230px;
-      background: linear-gradient(to bottom, #fbfcfe, #e4eaf2);
-      border: 1px solid #3a6ea5;
-      border-radius: 6px 6px 0 0;
-      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
-      overflow: hidden;
-      font-size: 13px;
-    }
-
-    .win7-start-menu-header {
-      background: linear-gradient(to bottom, #3d7dc4, #1c4d86);
-      color: #fff;
-      padding: 8px 12px;
-      font-weight: bold;
-    }
-
-    .win7-start-menu-item {
-      padding: 9px 14px;
-      cursor: pointer;
-      color: #1c2c3c;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .win7-start-menu-item:hover { background: #cfe2f7; }
-
-    /* ---------- Generic Aero window frame (used by loader + login dialog) ---------- */
-    .win7-window {
-      background: #f2f5f9;
-      border: 1px solid #1c4d86;
-      border-radius: 7px 7px 3px 3px;
-      box-shadow: 0 14px 40px rgba(0, 0, 0, 0.55);
-      overflow: hidden;
-    }
-
-    .win7-titlebar {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 6px 8px;
-      background: linear-gradient(to bottom, #6fb1ea 0%, #2f6fb4 45%, #1c4d86 100%);
-      color: #fff;
-    }
-
-    .win7-titlebar-icon { font-size: 13px; opacity: 0.95; }
-
-    .win7-titlebar-text {
-      flex: 1;
-      font-size: 12.5px;
-      font-weight: bold;
-      text-shadow: 0 1px 1px rgba(0, 0, 0, 0.4);
-    }
-
-    .win7-titlebar-controls { display: flex; gap: 2px; }
-
-    .win7-tbtn {
-      width: 24px;
-      height: 20px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 11px;
-      cursor: pointer;
-      background: rgba(255, 255, 255, 0.12);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-    }
-
-    .win7-tbtn:hover { background: rgba(255, 255, 255, 0.3); }
-    .win7-tbtn-close:hover { background: #e0413a; }
-
-    /* ---------- Fake exe loader ---------- */
-    #exe-loader { align-items: center; justify-content: center; }
-    #exe-loader .win7-bg { background: rgba(5, 15, 30, 0.55); backdrop-filter: blur(1px); }
-
-    .exe-loader-box { position: relative; width: 320px; }
-
-    .exe-loader-body { padding: 20px 18px 18px; text-align: center; color: #263646; }
-
-    .exe-loader-body p { font-size: 12.5px; margin: 0 0 14px; }
-
-    .exe-progress {
-      position: relative;
-      height: 16px;
-      border: 1px solid #9fb3c8;
-      border-radius: 3px;
-      background: #dde6ef;
-      overflow: hidden;
-    }
-
-    .exe-progress-fill {
-      position: absolute;
-      top: 0; bottom: 0; left: -40%;
-      width: 40%;
-      background: linear-gradient(to bottom, #7fc4f5, #2f7fc4);
-      animation: exeSlide 1.1s ease-in-out infinite;
-      border-radius: 2px;
-    }
-
-    @keyframes exeSlide {
-      0% { left: -40%; }
-      100% { left: 100%; }
-    }
-
-    /* ---------- Access gate now sits inside a win7 window ---------- */
-    #access-gate { z-index: 99995; }
-    #access-gate .win7-window { width: 400px; }
-    #access-gate table { border: none !important; background: transparent !important; }
-    #access-gate table td { border: none !important; }
-
-    /* ===================== AUTHENTICATED HOME DESKTOP ===================== */
-    #win7-home {
-      position: fixed;
-      inset: 0;
-      z-index: 1;
-      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-      display: none;
-    }
-
-    .win7-taskbar-apps {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      padding-left: 8px;
-      min-width: 0;
-    }
-
-    .taskbar-app-btn {
-      height: 30px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      padding: 0 10px;
-      background: rgba(255, 255, 255, 0.12);
-      border: 1px solid rgba(255, 255, 255, 0.22);
-      color: #fff;
-      font-size: 12px;
-      cursor: pointer;
-      white-space: nowrap;
-    }
-
-    .taskbar-app-btn:hover { background: rgba(255, 255, 255, 0.22); }
-
-    .taskbar-app-btn.active {
-      background: rgba(255, 255, 255, 0.34);
-      box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.4);
-    }
-
-    .tray-lock-btn {
-      background: none;
-      border: none;
-      color: #fff;
-      font-size: 14px;
-      cursor: pointer;
-      padding: 4px 2px;
-    }
-
-    .tray-lock-btn:hover { color: #ffd18a; }
-
-    /* ---------- App windows (draggable, maximizable) ---------- */
-    .app-window {
-      position: absolute;
-      z-index: 20;
-      display: none;
-      flex-direction: column;
-      min-width: 300px;
-      min-height: 220px;
-    }
-
-    .app-titlebar { cursor: move; }
-
-    .app-window-body {
-      flex: 1;
-      overflow: auto;
-      background: #CCCCCC;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-    }
-
-    .app-window.maximized {
-      top: 0 !important;
-      left: 0 !important;
-      right: 0;
-      bottom: 42px;
-      width: auto !important;
-      height: auto !important;
-      border-radius: 0;
-      box-shadow: none;
-    }
-  </style>
 </head>
 
 <body class="center" onload="SplashT" style="background-color: #CCCCCC;">
+  <!-- LOCKOUT BUTTON -->
+  <button id="lock-button" onclick="lockOut()" style="position: fixed; top: 10px; right: 10px; z-index: 99998; display: none; background: #CCCCCC; color: #000000; border: 2px outset #FFFFFF; padding: 4px 10px; font-family: 'Courier New', Courier, monospace; font-size: 12px; font-weight: bold; cursor: pointer;">
+    [ LOCK SESSION ]
+  </button>
 
-  <!-- ===================== AUTHENTICATED HOME DESKTOP ===================== -->
-  <div id="win7-home">
-    <div class="win7-bg" onclick="deselectIcons()"></div>
-
-    <div class="win7-icons">
-      <div class="win7-icon" ondblclick="openApp('interstellar')" onclick="selectIcon(this)">
-        <div class="icon-glyph"><i class="fa-solid fa-globe"></i></div>
-        <span>Interstellar</span>
-      </div>
-    </div>
-
-    <!-- App window: wraps the existing nav bar + search app, unchanged -->
-    <div id="app-interstellar" class="win7-window app-window" style="top: 70px; left: 110px; width: 620px; height: 420px;">
-      <div class="win7-titlebar app-titlebar">
-        <span class="win7-titlebar-icon"><i class="fa-solid fa-globe"></i></span>
-        <span class="win7-titlebar-text">Interstellar</span>
-        <div class="win7-titlebar-controls">
-          <div class="win7-tbtn" onclick="minimizeApp('interstellar')" title="Minimize">&#95;</div>
-          <div class="win7-tbtn" onclick="toggleMaximizeApp('interstellar')" title="Maximize / Restore"><i class="fa-regular fa-square"></i></div>
-          <div class="win7-tbtn win7-tbtn-close" onclick="minimizeApp('interstellar')" title="Close">&#10005;</div>
-        </div>
-      </div>
-      <div class="app-window-body">
-        <div class="nav-bar"></div>
-        <div class="main">
-          <h1 class="title">&#73;&#110;&#116;&#101;&#114;&#115;&#116;&#101;&#108;&#108;&#97;&#114;</h1>
-          <p id="splash"></p>
-          <div class="search-container">
-            <form id="fv" method="POST">
-              <input id="input" class="truncate" placeholder="Search or enter a URL" type="text" />
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="win7-taskbar">
-      <div class="win7-start" onclick="toggleStartMenu('home')"><i class="fa-solid fa-circle-play" style="transform: rotate(-90deg);"></i></div>
-      <div class="win7-taskbar-apps">
-        <div class="taskbar-app-btn active" id="taskbar-btn-interstellar" onclick="toggleAppFocus('interstellar')">
-          <i class="fa-solid fa-globe"></i> Interstellar
-        </div>
-      </div>
-      <div class="win7-tray">
-        <button id="lock-button" onclick="lockOut()" class="tray-lock-btn" title="Lock session"><i class="fa-solid fa-lock"></i></button>
-        <div class="win7-clock">
-          <div id="win7-home-clock-time">--:--</div>
-          <div id="win7-home-clock-date">--/--/----</div>
-        </div>
-      </div>
-    </div>
-
-    <div id="win7-home-start-menu" class="win7-start-menu">
-      <div class="win7-start-menu-header">Interstellar</div>
-      <div class="win7-start-menu-item" onclick="toggleStartMenu('home'); openApp('interstellar');">
-        <i class="fa-solid fa-globe"></i> Open Interstellar
-      </div>
-      <div class="win7-start-menu-item" onclick="toggleStartMenu('home'); lockOut();">
-        <i class="fa-solid fa-lock"></i> Lock session
-      </div>
+  <div class="nav-bar"></div>
+  <div class="main">
+    <h1 class="title">&#73;&#110;&#116;&#101;&#114;&#115;&#116;&#101;&#108;&#108;&#97;&#114;</h1>
+    <p id="splash"></p>
+    <div class="search-container">
+      <form id="fv" method="POST">
+        <input id="input" class="truncate" placeholder="Search or enter a URL" type="text" />
+      </form>
     </div>
   </div>
-
   <script src="/assets/js/vendor.js"></script>
   <script src="assets/js/search.js"></script>
   <script src="/assets/js/home.js"></script>
@@ -480,123 +95,65 @@
   <script src="/assets/scramjet/scramjet.all.js"></script>
   <script src="/assets/scramjet/scramjet.config.js"></script>
 
-  <!-- ===================== WINDOWS 7 LOCKED DESKTOP ===================== -->
-  <div id="win7-desktop">
-    <div class="win7-bg" onclick="deselectIcons()"></div>
-
-    <div class="win7-icons">
-      <div class="win7-icon" ondblclick="launchExe()" onclick="selectIcon(this)">
-        <div class="icon-glyph"><i class="fa-solid fa-terminal"></i></div>
-        <span>importent.exe<span class="icon-hint">(double-click)</span></span>
-      </div>
-    </div>
-
-    <div class="win7-taskbar">
-      <div class="win7-start" onclick="toggleStartMenu('lock')"><i class="fa-solid fa-circle-play" style="transform: rotate(-90deg);"></i></div>
-      <div class="win7-taskbar-mid">Session locked</div>
-      <div class="win7-tray">
-        <i class="fa-solid fa-shield-halved"></i>
-        <div class="win7-clock">
-          <div id="win7-clock-time">--:--</div>
-          <div id="win7-clock-date">--/--/----</div>
-        </div>
-      </div>
-    </div>
-
-    <div id="win7-start-menu" class="win7-start-menu">
-      <div class="win7-start-menu-header">Session</div>
-      <div class="win7-start-menu-item" onclick="toggleStartMenu(); launchExe();">
-        <i class="fa-solid fa-terminal"></i> Run importent.exe
-      </div>
-    </div>
-  </div>
-
-  <!-- ===================== FAKE EXE LOADER ===================== -->
-  <div id="exe-loader">
-    <div class="win7-bg"></div>
-    <div class="win7-window exe-loader-box">
-      <div class="win7-titlebar">
-        <span class="win7-titlebar-icon"><i class="fa-solid fa-terminal"></i></span>
-        <span class="win7-titlebar-text">importent.exe</span>
-      </div>
-      <div class="exe-loader-body">
-        <p>Verifying system integrity&hellip;</p>
-        <div class="exe-progress"><div class="exe-progress-fill"></div></div>
-      </div>
-    </div>
-  </div>
-
   <!-- WEB 1.0 TABLE GRID ACCESS GATE OVERLAY -->
-  <div id="access-gate" style="position: fixed; inset: 0; background-color: rgba(5, 15, 30, 0.55); display: none; align-items: center; justify-content: center; z-index: 99999; font-family: 'Courier New', Courier, monospace; color: #000000;">
+  <div id="access-gate" style="position: fixed; inset: 0; background-color: #CCCCCC; display: flex; align-items: center; justify-content: center; z-index: 99999; font-family: 'Courier New', Courier, monospace; color: #000000;">
+    
+    <table border="3" cellpadding="12" cellspacing="0" width="400" bgcolor="#C0C0C0" style="border-style: outset; border-color: #FFFFFF #808080 #808080 #FFFFFF;">
+      <tr>
+        <td align="center" bgcolor="#000080" style="color: #FFFFFF; font-family: Arial, Helvetica, sans-serif; font-size: 14px; font-weight: bold; padding: 6px;">
+          *** WARNING: RESTRICTED SYSTEM ***
+        </td>
+      </tr>
+      <tr>
+        <td align="center" bgcolor="#FFFFFF" style="border: 2px inset #808080; padding: 6px; font-family: 'Courier New', Courier, monospace; font-size: 11px; color: #FF0000; font-weight: bold;">
+          UNAUTHORIZED ACCESS IS STRICTLY PROHIBITED
+        </td>
+      </tr>
+      <tr>
+        <td style="padding: 16px;">
+          <h2 style="margin: 0 0 8px 0; font-size: 16px; font-family: Arial, Helvetica, sans-serif; font-weight: bold; text-transform: uppercase;">
+            System Gateway Login
+          </h2>
+          <p style="margin: 0 0 12px 0; font-size: 12px; line-height: 1.3;">
+            Enter security passcode to unlock terminal session.
+          </p>
 
-    <div class="win7-window">
-      <div class="win7-titlebar">
-        <span class="win7-titlebar-icon"><i class="fa-solid fa-shield-halved"></i></span>
-        <span class="win7-titlebar-text">System Gateway Login</span>
-        <div class="win7-titlebar-controls">
-          <div class="win7-tbtn" onclick="showDesktop()" title="Minimize">&#95;</div>
-          <div class="win7-tbtn" title="Maximize">&#9633;</div>
-          <div class="win7-tbtn win7-tbtn-close" onclick="showDesktop()" title="Close">&#10005;</div>
-        </div>
-      </div>
+          <hr size="2" color="#808080" style="margin: 12px 0; border: none; border-top: 1px solid #808080; border-bottom: 1px solid #FFFFFF;" />
 
-      <table border="0" cellpadding="12" cellspacing="0" width="100%" bgcolor="#C0C0C0">
-        <tr>
-          <td align="center" bgcolor="#000080" style="color: #FFFFFF; font-family: Arial, Helvetica, sans-serif; font-size: 14px; font-weight: bold; padding: 6px;">
-            *** WARNING: RESTRICTED SYSTEM ***
-          </td>
-        </tr>
-        <tr>
-          <td align="center" bgcolor="#FFFFFF" style="border: 2px inset #808080; padding: 6px; font-family: 'Courier New', Courier, monospace; font-size: 11px; color: #FF0000; font-weight: bold;">
-            UNAUTHORIZED ACCESS IS STRICTLY PROHIBITED
-          </td>
-        </tr>
-        <tr>
-          <td style="padding: 16px;">
-            <h2 style="margin: 0 0 8px 0; font-size: 16px; font-family: Arial, Helvetica, sans-serif; font-weight: bold; text-transform: uppercase;">
-              System Gateway Login
-            </h2>
-            <p style="margin: 0 0 12px 0; font-size: 12px; line-height: 1.3;">
-              Enter security passcode to unlock terminal session.
-            </p>
+          <form onsubmit="event.preventDefault(); validateAccessCode();" style="margin: 0;">
+            <table border="0" cellpadding="4" cellspacing="0" width="100%">
+              <tr>
+                <td width="30%" align="right" style="font-size: 12px; font-weight: bold;">
+                  PASSCODE:
+                </td>
+                <td width="70%">
+                  <div style="display: flex; align-items: center; background: #FFFFFF; border: 2px inset #808080;">
+                    <input type="password" id="access-input" autocomplete="off" spellcheck="false" style="width: 100%; padding: 4px; border: none; background: transparent; font-family: 'Courier New', Courier, monospace; font-size: 13px; color: #000000; outline: none; border-radius: 0px !important;" />
+                    <button type="button" onclick="togglePasscodeVisibility()" style="background: #C0C0C0; border: 1px outset #FFFFFF; padding: 2px 6px; cursor: pointer; border-radius: 0px !important;" title="Toggle Visibility">
+                      <i id="eye-icon" class="fa-solid fa-eye" style="font-size: 11px; color: #000000;"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td colspan="2" align="right" style="padding-top: 12px;">
+                  <input type="submit" value="[ ENTER SYSTEM ]" style="background: #C0C0C0; color: #000000; border: 2px outset #FFFFFF; padding: 4px 12px; font-family: Arial, Helvetica, sans-serif; font-size: 12px; font-weight: bold; cursor: pointer; border-radius: 0px !important;" />
+                </td>
+              </tr>
+            </table>
+          </form>
 
-            <hr size="2" color="#808080" style="margin: 12px 0; border: none; border-top: 1px solid #808080; border-bottom: 1px solid #FFFFFF;" />
-
-            <form onsubmit="event.preventDefault(); validateAccessCode();" style="margin: 0;">
-              <table border="0" cellpadding="4" cellspacing="0" width="100%">
-                <tr>
-                  <td width="30%" align="right" style="font-size: 12px; font-weight: bold;">
-                    PASSCODE:
-                  </td>
-                  <td width="70%">
-                    <div style="display: flex; align-items: center; background: #FFFFFF; border: 2px inset #808080;">
-                      <input type="password" id="access-input" autocomplete="off" spellcheck="false" style="width: 100%; padding: 4px; border: none; background: transparent; font-family: 'Courier New', Courier, monospace; font-size: 13px; color: #000000; outline: none; border-radius: 0px !important;" />
-                      <button type="button" onclick="togglePasscodeVisibility()" style="background: #C0C0C0; border: 1px outset #FFFFFF; padding: 2px 6px; cursor: pointer; border-radius: 0px !important;" title="Toggle Visibility">
-                        <i id="eye-icon" class="fa-solid fa-eye" style="font-size: 11px; color: #000000;"></i>
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td colspan="2" align="right" style="padding-top: 12px;">
-                    <input type="submit" value="[ ENTER SYSTEM ]" style="background: #C0C0C0; color: #000000; border: 2px outset #FFFFFF; padding: 4px 12px; font-family: Arial, Helvetica, sans-serif; font-size: 12px; font-weight: bold; cursor: pointer; border-radius: 0px !important;" />
-                  </td>
-                </tr>
-              </table>
-            </form>
-
-            <p id="access-error" style="color: #FF0000; font-size: 12px; font-weight: bold; margin-top: 12px; margin-bottom: 0; text-align: center; display: none;">
-              ERROR: INVALID PASSCODE SUPPLIED.
-            </p>
-          </td>
-        </tr>
-        <tr>
-          <td align="right" bgcolor="#CCCCCC" style="font-size: 10px; color: #555555; border-top: 1px solid #808080; padding: 4px 8px;">
-            SECURE PROTOCOL V1.04
-          </td>
-        </tr>
-      </table>
-    </div>
+          <p id="access-error" style="color: #FF0000; font-size: 12px; font-weight: bold; margin-top: 12px; margin-bottom: 0; text-align: center; display: none;">
+            ERROR: INVALID PASSCODE SUPPLIED.
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td align="right" bgcolor="#CCCCCC" style="font-size: 10px; color: #555555; border-top: 1px solid #808080; padding: 4px 8px;">
+          SECURE PROTOCOL V1.04
+        </td>
+      </tr>
+    </table>
 
   </div>
 
@@ -616,131 +173,19 @@
       }
     }
 
-    /* ---------- Desktop / gate state management ---------- */
-    function showDesktop() {
-      document.getElementById("win7-desktop").style.display = "block";
-      document.getElementById("exe-loader").style.display = "none";
-      document.getElementById("access-gate").style.display = "none";
-      document.getElementById("win7-home").style.display = "none";
-      document.getElementById("win7-start-menu").style.display = "none";
-    }
-
     function checkAccessCode() {
       const isAuth = sessionStorage.getItem("interstellar_authenticated");
+      const accessGate = document.getElementById("access-gate");
+      const lockBtn = document.getElementById("lock-button");
 
       if (isAuth === "true") {
-        document.getElementById("win7-desktop").style.display = "none";
-        document.getElementById("exe-loader").style.display = "none";
-        document.getElementById("access-gate").style.display = "none";
-        document.getElementById("win7-home").style.display = "block";
-        openApp("interstellar");
+        accessGate.style.display = "none";
+        if (lockBtn) lockBtn.style.display = "block";
       } else {
-        document.getElementById("win7-home").style.display = "none";
-        showDesktop();
+        accessGate.style.display = "flex";
+        if (lockBtn) lockBtn.style.display = "none";
       }
     }
-
-    function launchExe() {
-      document.getElementById("win7-start-menu").style.display = "none";
-      document.getElementById("win7-desktop").style.display = "none";
-      document.getElementById("exe-loader").style.display = "flex";
-
-      setTimeout(() => {
-        document.getElementById("exe-loader").style.display = "none";
-        document.getElementById("access-gate").style.display = "flex";
-      }, 1400);
-    }
-
-    function selectIcon(el) {
-      document.querySelectorAll(".win7-icon").forEach(i => i.classList.remove("selected"));
-      el.classList.add("selected");
-    }
-
-    function deselectIcons() {
-      document.querySelectorAll(".win7-icon").forEach(i => i.classList.remove("selected"));
-    }
-
-    function toggleStartMenu(which) {
-      const id = which === "home" ? "win7-home-start-menu" : "win7-start-menu";
-      const menu = document.getElementById(id);
-      if (menu) menu.style.display = menu.style.display === "block" ? "none" : "block";
-    }
-
-    function updateWin7Clock() {
-      const now = new Date();
-      let h = now.getHours();
-      const m = String(now.getMinutes()).padStart(2, "0");
-      const ampm = h >= 12 ? "PM" : "AM";
-      h = h % 12; if (h === 0) h = 12;
-      const timeStr = `${h}:${m} ${ampm}`;
-      const dateStr = now.toLocaleDateString();
-      ["win7-clock-time", "win7-home-clock-time"].forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.textContent = timeStr;
-      });
-      ["win7-clock-date", "win7-home-clock-date"].forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.textContent = dateStr;
-      });
-    }
-    updateWin7Clock();
-    setInterval(updateWin7Clock, 1000);
-
-    /* ---------- App window manager (open / minimize / maximize / focus) ---------- */
-    function openApp(name) {
-      const win = document.getElementById("app-" + name);
-      const btn = document.getElementById("taskbar-btn-" + name);
-      if (!win) return;
-      win.style.display = "flex";
-      if (btn) btn.classList.add("active");
-    }
-
-    function minimizeApp(name) {
-      const win = document.getElementById("app-" + name);
-      const btn = document.getElementById("taskbar-btn-" + name);
-      if (!win) return;
-      win.style.display = "none";
-      if (btn) btn.classList.remove("active");
-    }
-
-    function toggleAppFocus(name) {
-      const win = document.getElementById("app-" + name);
-      if (!win) return;
-      if (win.style.display === "none" || !win.style.display) {
-        openApp(name);
-      } else {
-        minimizeApp(name);
-      }
-    }
-
-    function toggleMaximizeApp(name) {
-      const win = document.getElementById("app-" + name);
-      if (win) win.classList.toggle("maximized");
-    }
-
-    /* ---------- Drag any .app-window by its .app-titlebar ---------- */
-    (function enableAppWindowDrag() {
-      let dragEl = null, offsetX = 0, offsetY = 0;
-
-      document.addEventListener("mousedown", (e) => {
-        const handle = e.target.closest(".app-titlebar");
-        if (!handle) return;
-        const win = handle.closest(".app-window");
-        if (!win || win.classList.contains("maximized")) return;
-        dragEl = win;
-        const rect = win.getBoundingClientRect();
-        offsetX = e.clientX - rect.left;
-        offsetY = e.clientY - rect.top;
-      });
-
-      document.addEventListener("mousemove", (e) => {
-        if (!dragEl) return;
-        dragEl.style.left = `${e.clientX - offsetX}px`;
-        dragEl.style.top = `${e.clientY - offsetY}px`;
-      });
-
-      document.addEventListener("mouseup", () => { dragEl = null; });
-    })();
 
     async function validateAccessCode() {
       const inputVal = document.getElementById("access-input").value;
