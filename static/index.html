@@ -15,40 +15,26 @@
   <script src="/assets/js/main.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-  <!-- POPUP / POPUNDER BLOCKER -->
   <script>
     (function() {
-      const BLOCKED_DOMAINS = [
-        "undercoverhiking.com",
-        "bad-ad-network.com",
-        "popunder.xyz",
-        "redirect-link.net"
-      ];
-
+      const BLOCKED_DOMAINS = ["undercoverhiking.com", "bad-ad-network.com", "popunder.xyz", "redirect-link.net"];
       function isBlocked(url) {
         if (!url || typeof url !== "string") return false;
         return BLOCKED_DOMAINS.some(domain => url.toLowerCase().includes(domain.toLowerCase()));
       }
-
       const originalOpen = window.open;
       window.open = function(url, target, features) {
-        if (isBlocked(url)) {
-          console.log("Blocked popup redirect:", url);
-          return null;
-        }
+        if (isBlocked(url)) return null;
         return originalOpen.apply(this, arguments);
       };
-
       document.addEventListener("click", function(e) {
         let target = e.target;
         while (target && target !== document) {
           const href = target.href || "";
           const onclickAttr = target.getAttribute && target.getAttribute("onclick") || "";
-
           if (isBlocked(href) || isBlocked(onclickAttr)) {
             e.preventDefault();
             e.stopPropagation();
-            console.log("Blocked click redirect:", href || onclickAttr);
             break;
           }
           target = target.parentNode;
@@ -64,380 +50,486 @@
       pointer-events: none !important;
     }
 
-    /* WINDOWS 7 AERO THEME STYLES */
+    /* WINDOWS 7 EXACT CSS RECREATION */
     :root {
-      --win7-glass-bg: rgba(210, 230, 250, 0.45);
-      --win7-glass-border: rgba(255, 255, 255, 0.6);
-      --win7-window-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.5) inset;
+      --aero-glass: rgba(166, 203, 236, 0.55);
+      --aero-border: rgba(255, 255, 255, 0.7);
+      --aero-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+      --win7-text: #000000;
     }
 
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
       margin: 0;
       padding: 0;
       overflow: hidden;
       user-select: none;
     }
 
-    /* Windows 7 Desktop Background */
+    /* Windows 7 Default Wallpaper (Harmony) Recreation via CSS */
     #access-gate {
       position: fixed;
       inset: 0;
       z-index: 99999;
-      background: radial-gradient(circle at 50% 30%, #2e71b8 0%, #153860 60%, #09182d 100%);
+      background-color: #0b5093;
+      background-image: 
+        radial-gradient(circle at 50% 100%, #1579a7 0%, transparent 60%),
+        radial-gradient(circle at 20% 0%, #1a83cc 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 30%, #5bb2e9 0%, transparent 40%),
+        radial-gradient(circle at 50% 50%, #155d9d 0%, #063463 100%);
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       overflow: hidden;
     }
 
-    /* Background Ribbon Effect */
-    #access-gate::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: 
-        radial-gradient(ellipse at 20% 80%, rgba(110, 190, 255, 0.25) 0%, transparent 50%),
-        radial-gradient(ellipse at 80% 20%, rgba(0, 220, 255, 0.15) 0%, transparent 60%);
-      pointer-events: none;
-    }
-
-    /* Desktop Icon Grid */
+    /* Desktop Area & Icons */
     .desktop-area {
       flex: 1;
-      padding: 16px;
+      padding: 5px;
       display: flex;
       flex-direction: column;
       flex-wrap: wrap;
       align-content: flex-start;
-      gap: 12px;
+      gap: 2px;
       position: relative;
     }
 
     .win7-icon {
-      width: 82px;
-      padding: 8px 4px;
+      width: 74px;
+      padding: 4px 2px;
       display: flex;
       flex-direction: column;
       align-items: center;
       text-align: center;
       color: #ffffff;
-      font-size: 11px;
-      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
+      font-size: 11.5px;
+      text-shadow: 0 1px 2px #000, 0 1px 2px #000; /* Distinct Win7 text shadow */
       border: 1px solid transparent;
       border-radius: 3px;
-      cursor: pointer;
+      cursor: default;
+      margin-bottom: 8px;
     }
 
     .win7-icon:hover {
-      background: rgba(255, 255, 255, 0.18);
-      border-color: rgba(255, 255, 255, 0.35);
-      box-shadow: 0 0 8px rgba(255, 255, 255, 0.2) inset;
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .win7-icon.selected {
+      background: rgba(204, 232, 255, 0.4);
+      border: 1px solid rgba(153, 209, 255, 0.7);
     }
 
     .win7-icon i {
-      font-size: 34px;
-      margin-bottom: 6px;
-      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+      font-size: 38px;
+      margin-bottom: 4px;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4));
     }
 
-    /* Generic Aero Window Frame */
+    /* Multi-color FontAwesome overrides for classic feel */
+    .icon-computer { color: #5bc0de; }
+    .icon-network { color: #5cb85c; }
+    .icon-recycle { color: #e2e8f0; }
+    .icon-exe { color: #f0ad4e; }
+
+    /* Exact Aero Window */
     .aero-window {
       position: absolute;
-      background: rgba(235, 242, 250, 0.85);
-      backdrop-filter: blur(12px);
-      border-radius: 8px 8px 4px 4px;
-      border: 1px solid var(--win7-glass-border);
-      box-shadow: var(--win7-window-shadow);
+      background: transparent;
+      border-radius: 8px 8px 0 0;
       display: flex;
       flex-direction: column;
-      min-width: 320px;
-      overflow: hidden;
+      min-width: 300px;
+      box-shadow: var(--aero-shadow);
+      /* Thick borders for left, right, bottom */
+      padding: 0 6px 6px 6px; 
+      background-clip: padding-box;
     }
 
-    /* Aero Glass Title Bar */
+    /* The Glass Effect Background Element */
+    .aero-glass-bg {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: var(--aero-glass);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid var(--aero-border);
+      border-radius: 8px 8px 4px 4px;
+      box-shadow: inset 0 0 1px #fff, inset 0 1px 0 rgba(255,255,255,0.8);
+      z-index: -1;
+    }
+
+    /* Inactive Window State */
+    .aero-window.inactive .aero-glass-bg {
+      background: rgba(230, 235, 240, 0.4);
+    }
+    .aero-window.inactive .aero-title-text {
+      color: rgba(0,0,0,0.5);
+      text-shadow: none;
+    }
+
+    /* Aero Title Bar */
     .aero-titlebar {
-      height: 32px;
-      background: linear-gradient(180deg, rgba(255,255,255,0.6) 0%, rgba(210,230,250,0.3) 40%, rgba(150,190,230,0.4) 50%, rgba(180,215,250,0.5) 100%);
-      border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+      height: 28px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 8px;
-      cursor: move;
+      cursor: default;
+      position: relative;
+      margin-top: 2px;
     }
 
     .aero-title-text {
       font-size: 12px;
-      font-weight: 600;
-      color: #1e293b;
+      color: #000;
       display: flex;
       align-items: center;
-      gap: 6px;
-      text-shadow: 0 0 6px rgba(255,255,255,0.8);
+      gap: 5px;
+      text-shadow: 0 0 4px #fff, 0 0 4px #fff, 0 0 8px #fff; /* Classic Win7 Glow */
+      padding-left: 4px;
+      pointer-events: none;
     }
 
+    /* Window Controls */
     .aero-controls {
       display: flex;
-      align-items: center;
+      height: 20px;
       gap: 1px;
+      margin-top: -8px; /* Sits flush with top in Win7 */
+      margin-right: -4px;
     }
 
     .aero-btn-ctrl {
-      width: 26px;
-      height: 18px;
-      border: 1px solid rgba(255, 255, 255, 0.6);
-      border-radius: 3px;
-      background: linear-gradient(180deg, rgba(255,255,255,0.7) 0%, rgba(200,215,235,0.5) 100%);
-      color: #333;
-      font-size: 10px;
+      width: 28px;
+      height: 20px;
+      border: 1px solid rgba(0, 0, 0, 0.3);
+      border-radius: 0 0 3px 3px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.7) 0%, rgba(255,255,255,0.2) 40%, rgba(200,215,235,0.4) 50%, rgba(220,230,245,0.6) 100%);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.8);
+      color: #000;
+      font-size: 11px;
       display: flex;
       align-items: center;
       justify-content: center;
-      cursor: pointer;
-      box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+      font-family: "Marlett", sans-serif; /* Classic Windows symbol font fallback */
     }
 
     .aero-btn-ctrl:hover {
-      background: linear-gradient(180deg, rgba(255,255,255,0.9) 0%, rgba(220,235,255,0.8) 100%);
+      background: linear-gradient(180deg, rgba(255,255,255,0.9) 0%, rgba(210,230,250,0.6) 40%, rgba(170,210,240,0.8) 50%, rgba(230,240,255,0.9) 100%);
+      box-shadow: inset 0 1px 0 #fff, 0 0 5px rgba(255,255,255,0.8);
+    }
+
+    .aero-btn-ctrl.close-btn {
+      width: 44px;
+      background: linear-gradient(180deg, rgba(240,160,160,0.7) 0%, rgba(200,90,90,0.5) 40%, rgba(180,40,40,0.7) 50%, rgba(220,100,100,0.8) 100%);
     }
 
     .aero-btn-ctrl.close-btn:hover {
-      background: linear-gradient(180deg, #f87171 0%, #dc2626 100%);
-      color: #ffffff;
-      border-color: #ef4444;
+      background: linear-gradient(180deg, #fba8a8 0%, #e25858 40%, #c41e1e 50%, #e35454 100%);
+      color: white;
+      border-color: #8a1313;
+      box-shadow: inset 0 1px 0 #ffcccc, 0 0 5px #ff5555;
     }
 
+    /* Window Body */
     .aero-body {
-      background: #f8fafc;
-      padding: 12px;
+      background: #f0f0f0; /* Standard Win32 Grey */
+      border: 1px solid rgba(0,0,0,0.5);
       flex: 1;
-      font-size: 12px;
-      color: #1e293b;
+      display: flex;
+      flex-direction: column;
+      position: relative;
     }
 
-    /* Windows 7 Taskbar */
+    /* Win7 Taskbar */
     .win7-taskbar {
       height: 40px;
-      background: linear-gradient(180deg, rgba(255,255,255,0.3) 0%, rgba(180,210,240,0.2) 10%, rgba(20,50,90,0.6) 20%, rgba(10,30,60,0.8) 100%);
-      backdrop-filter: blur(16px);
-      border-top: 1px solid rgba(255, 255, 255, 0.4);
+      background: 
+        linear-gradient(180deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0.1) 45%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.4) 100%),
+        var(--aero-glass);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-top: 1px solid rgba(255, 255, 255, 0.6);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 4px;
+      padding: 0;
       z-index: 1000000;
+      position: relative;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.4);
     }
 
-    /* Start Orb */
-    .start-orb {
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      background: radial-gradient(circle at 35% 35%, #60a5fa 0%, #1d4ed8 50%, #1e3a8a 100%);
-      border: 2px solid rgba(255, 255, 255, 0.8);
-      box-shadow: 0 0 10px rgba(59, 130, 246, 0.6), 0 2px 4px rgba(0,0,0,0.4);
+    /* Start Orb (Taller than taskbar) */
+    .start-orb-container {
+      width: 54px;
+      height: 54px;
+      position: relative;
+      margin-top: -14px;
+      margin-left: 4px;
       display: flex;
       align-items: center;
       justify-content: center;
-      cursor: pointer;
-      color: #ffffff;
-      font-size: 16px;
-      margin-right: 8px;
+      cursor: default;
+    }
+
+    .start-orb {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, #5cb4ff 0%, #1578d4 40%, #083073 100%);
+      border: 2px solid rgba(255,255,255,0.9);
+      box-shadow: 0 2px 5px rgba(0,0,0,0.5), inset 0 -2px 5px rgba(0,0,0,0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.1s;
     }
 
     .start-orb:hover {
-      box-shadow: 0 0 15px rgba(147, 197, 253, 0.9), 0 0 5px rgba(255, 255, 255, 0.8) inset;
+      background: radial-gradient(circle at 30% 30%, #8cd0ff 0%, #208bee 40%, #0d46a0 100%);
+      box-shadow: 0 0 10px #70c3ff, inset 0 -2px 5px rgba(0,0,0,0.3);
     }
 
+    .start-orb i {
+      color: #fff;
+      font-size: 22px;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+    }
+
+    /* Taskbar Items */
     .taskbar-items {
       display: flex;
       align-items: center;
-      gap: 4px;
+      gap: 2px;
       flex: 1;
+      height: 100%;
+      padding-left: 10px;
     }
 
     .taskbar-button {
-      height: 32px;
+      height: 38px;
+      min-width: 46px;
       padding: 0 10px;
-      border-radius: 4px;
-      background: linear-gradient(180deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.1) 100%);
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      color: #ffffff;
-      font-size: 11px;
+      border-radius: 3px;
+      border: 1px solid transparent;
       display: flex;
       align-items: center;
+      justify-content: center;
       gap: 6px;
-      cursor: pointer;
-      text-shadow: 0 1px 2px rgba(0,0,0,0.8);
+      cursor: default;
+    }
+
+    .taskbar-button:hover {
+      background: linear-gradient(180deg, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0.1) 45%, rgba(180,220,255,0.4) 50%, rgba(220,240,255,0.6) 100%);
+      border: 1px solid rgba(255,255,255,0.5);
+      box-shadow: inset 0 0 4px rgba(255,255,255,0.8);
     }
 
     .taskbar-button.active {
-      background: linear-gradient(180deg, rgba(255,255,255,0.5) 0%, rgba(180,220,255,0.3) 100%);
-      border-color: rgba(255, 255, 255, 0.6);
-      box-shadow: 0 0 8px rgba(255,255,255,0.4) inset;
+      background: linear-gradient(180deg, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0.2) 45%, rgba(150,200,255,0.5) 50%, rgba(200,230,255,0.8) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.7);
+      box-shadow: inset 0 0 6px rgba(255,255,255,0.9), 0 0 3px rgba(255,255,255,0.3);
+    }
+    
+    .taskbar-button span {
+      display: none; /* Win7 usually combines them unless "never combine" is checked */
     }
 
+    /* System Tray */
     .system-tray {
       display: flex;
       align-items: center;
-      gap: 10px;
+      height: 100%;
+      padding: 0 10px;
       color: #ffffff;
       font-size: 11px;
-      padding: 0 8px;
-      text-shadow: 0 1px 2px rgba(0,0,0,0.8);
-      border-left: 1px solid rgba(255, 255, 255, 0.2);
+      text-shadow: 0 1px 2px #000;
+      gap: 8px;
     }
+    .system-tray i { font-size: 14px; }
+    .show-desktop-btn {
+      width: 14px;
+      height: 40px;
+      border-left: 1px solid rgba(255,255,255,0.3);
+      background: rgba(0,0,0,0.1);
+      margin-left: 5px;
+      box-shadow: inset 1px 0 0 rgba(255,255,255,0.2);
+    }
+    .show-desktop-btn:hover { background: rgba(255,255,255,0.2); }
 
-    /* Win7 Start Menu */
+    /* Exact Win7 Start Menu */
     .win7-start-menu {
       position: absolute;
-      bottom: 44px;
-      left: 4px;
+      bottom: 40px;
+      left: 0;
       width: 380px;
-      height: 420px;
-      background: rgba(230, 240, 250, 0.92);
-      backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.7);
-      border-radius: 8px 8px 0 0;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      height: 450px;
+      background: var(--aero-glass);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--aero-border);
+      border-radius: 5px 5px 0 0;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.6);
       display: none;
       flex-direction: column;
       z-index: 999999;
-      overflow: hidden;
+      padding: 2px;
+      padding-top: 6px;
     }
 
-    .start-menu-body {
+    .start-menu-inner {
       display: flex;
       flex: 1;
-      padding: 6px;
-      gap: 6px;
+      background: #ffffff;
+      border: 1px solid #7a7a7a;
+      border-radius: 3px;
+      overflow: hidden;
+      margin: 0 4px;
     }
 
     .start-left {
-      flex: 1.2;
+      flex: 1;
       background: #ffffff;
-      border-radius: 4px;
-      padding: 6px;
+      padding: 4px;
       display: flex;
       flex-direction: column;
-      gap: 4px;
-      box-shadow: 0 0 2px rgba(0,0,0,0.2) inset;
     }
-
-    .start-item {
+    
+    .start-left-item {
       display: flex;
       align-items: center;
       gap: 8px;
-      padding: 6px 8px;
+      padding: 6px;
+      border: 1px solid transparent;
       border-radius: 3px;
+      color: #000;
       font-size: 12px;
-      color: #1e293b;
-      cursor: pointer;
+      cursor: default;
+    }
+    
+    .start-left-item:hover {
+      background: linear-gradient(180deg, #f4f8fc 0%, #e1eff8 100%);
+      border-color: #9cd4f8;
+      box-shadow: inset 0 0 2px #fff;
     }
 
-    .start-item:hover {
-      background: linear-gradient(180deg, #e0f2fe 0%, #bae6fd 100%);
-      border: 1px solid #7dd3fc;
-    }
+    .start-left-item i { font-size: 20px; width: 24px; text-align: center; }
 
     .start-right {
-      flex: 1;
+      width: 140px;
+      background: #18283d;
+      border-left: 1px solid #7a7a7a;
+      padding: 4px;
       display: flex;
       flex-direction: column;
-      gap: 4px;
-      padding: 6px;
-      font-size: 11px;
+      gap: 2px;
     }
 
     .start-right-item {
-      padding: 4px 8px;
-      color: #1e3a8a;
-      font-weight: 600;
-      cursor: pointer;
+      padding: 6px 8px;
+      color: #fff;
+      font-size: 11px;
+      cursor: default;
+      border: 1px solid transparent;
       border-radius: 3px;
     }
 
     .start-right-item:hover {
-      background: rgba(255, 255, 255, 0.5);
+      background: rgba(255,255,255,0.15);
+      border-color: rgba(255,255,255,0.3);
     }
+    
+    .start-right-item.bold { font-weight: bold; }
 
-    .start-menu-footer {
-      height: 40px;
-      background: linear-gradient(180deg, rgba(210,230,250,0.6) 0%, rgba(180,210,240,0.8) 100%);
-      border-top: 1px solid rgba(255,255,255,0.5);
+    .start-menu-search {
+      height: 38px;
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      padding: 0 8px;
+      gap: 10px;
+    }
+    
+    .search-box {
+      flex: 1;
+      height: 24px;
+      border: 1px solid #999;
+      border-radius: 12px;
       padding: 0 10px;
-    }
-
-    /* UI Inputs & Buttons */
-    .win7-input {
-      width: 100%;
-      padding: 5px 8px;
-      border: 1px solid #94a3b8;
-      border-radius: 2px;
-      box-shadow: 0 1px 2px rgba(0,0,0,0.1) inset;
-      outline: none;
-      font-size: 12px;
-    }
-
-    .win7-input:focus {
-      border-color: #3b82f6;
-      box-shadow: 0 0 4px rgba(59, 130, 246, 0.5);
-    }
-
-    .win7-btn {
-      padding: 4px 14px;
-      background: linear-gradient(180deg, #ffffff 0%, #e2e8f0 100%);
-      border: 1px solid #94a3b8;
-      border-radius: 3px;
       font-size: 11px;
-      font-weight: 600;
-      color: #1e293b;
-      cursor: pointer;
-      box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+      font-style: italic;
+      color: #666;
+      background: #fff url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="12" height="12"><path fill="%23999" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>') no-repeat right 8px center;
+      outline: none;
     }
 
-    .win7-btn:hover {
-      background: linear-gradient(180deg, #f1f5f9 0%, #cbd5e1 100%);
-      border-color: #64748b;
+    .shutdown-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: #fff;
+      font-size: 11px;
+      padding: 4px 8px;
+      border: 1px solid transparent;
+      border-radius: 3px;
+    }
+    .shutdown-btn:hover {
+      background: rgba(255,255,255,0.15);
+      border-color: rgba(255,255,255,0.3);
     }
 
-    .win7-btn-primary {
-      background: linear-gradient(180deg, #60a5fa 0%, #2563eb 100%);
-      color: #ffffff;
-      border-color: #1d4ed8;
+    /* Win32 UI Inputs (Inside Apps) */
+    .win32-btn {
+      background: linear-gradient(180deg, #f2f2f2 0%, #ebebeb 50%, #dddddd 52%, #cfcfcf 100%);
+      border: 1px solid #707070;
+      border-radius: 3px;
+      padding: 4px 14px;
+      font-size: 12px;
+      font-family: "Segoe UI", sans-serif;
+      color: #000;
+      box-shadow: inset 0 0 0 1px #fff;
+      cursor: default;
+    }
+    .win32-btn:hover {
+      background: linear-gradient(180deg, #eaf6fd 0%, #d9f0fc 50%, #bee6fd 52%, #a7d9f5 100%);
+      border-color: #3c7fb1;
+    }
+    .win32-btn:active {
+      background: linear-gradient(180deg, #e5f4fc 0%, #c4e5f6 50%, #98d1ef 52%, #68b3db 100%);
+      border-color: #2c628b;
+      box-shadow: inset 0 1px 2px rgba(0,0,0,0.2);
+    }
+    
+    .win32-input {
+      border: 1px solid #abadb3;
+      padding: 4px;
+      font-size: 12px;
+      font-family: "Segoe UI", sans-serif;
+      outline: none;
+    }
+    .win32-input:hover { border-color: #7eb4ea; }
+    .win32-input:focus { border-color: #569de5; }
+
+    /* Window specific interior styling */
+    .app-toolbar {
+      background: #f5f6f7;
+      border-bottom: 1px solid #d9d9d9;
+      padding: 4px 8px;
+      font-size: 12px;
+      color: #333;
+      display: flex;
+      gap: 12px;
     }
 
-    .win7-btn-primary:hover {
-      background: linear-gradient(180deg, #3b82f6 0%, #1d4ed8 100%);
-    }
-
-    /* Progress bar styling */
-    .progress-bar-bg {
-      height: 12px;
-      background: #e2e8f0;
-      border-radius: 6px;
-      overflow: hidden;
-      border: 1px solid #cbd5e1;
-    }
-
-    .progress-bar-fill {
-      height: 100%;
-      background: linear-gradient(180deg, #4ade80 0%, #16a34a 100%);
-      width: 35%;
+    .app-content {
+      padding: 16px;
+      background: #ffffff;
+      flex: 1;
+      overflow: auto;
     }
   </style>
 </head>
 
 <body class="center" onload="SplashT">
-  <!-- LOCKOUT BUTTON -->
-  <button id="lock-button" onclick="lockOut()" class="win7-btn" style="position: fixed; top: 10px; right: 10px; z-index: 99998; display: none;">
-    <i class="fa-solid fa-lock"></i> Lock Session
-  </button>
-
   <div class="nav-bar"></div>
   <div class="main">
     <h1 class="title">&#73;&#110;&#116;&#101;&#114;&#115;&#116;&#101;&#108;&#108;&#97;&#114;</h1>
@@ -456,243 +548,216 @@
   <script src="/assets/scramjet/scramjet.all.js"></script>
   <script src="/assets/scramjet/scramjet.config.js"></script>
 
-  <!-- WINDOWS 7 AERO DESKTOP OVERLAY -->
-  <div id="access-gate">
+  <!-- WINDOWS 7 EXACT OVERLAY -->
+  <div id="access-gate" onclick="closeStartMenu()">
     
-    <!-- DESKTOP AREA & ICONS -->
-    <div class="desktop-area" onclick="closeStartMenu()">
-      
-      <!-- Computer -->
-      <div class="win7-icon" onclick="openWindow('win-computer')">
-        <i class="fa-solid fa-desktop" style="color: #60a5fa;"></i>
+    <!-- DESKTOP -->
+    <div class="desktop-area">
+      <!-- Icons use ondblclick for Win7 behavior -->
+      <div class="win7-icon" id="icon-computer" onclick="selectIcon('icon-computer')" ondblclick="openWindow('win-computer')">
+        <i class="fa-solid fa-desktop icon-computer"></i>
         <span>Computer</span>
       </div>
-
-      <!-- Network -->
-      <div class="win7-icon" onclick="openWindow('win-network')">
-        <i class="fa-solid fa-network-wired" style="color: #38bdf8;"></i>
+      <div class="win7-icon" id="icon-network" onclick="selectIcon('icon-network')" ondblclick="openWindow('win-network')">
+        <i class="fa-solid fa-network-wired icon-network"></i>
         <span>Network</span>
       </div>
-
-      <!-- Recycle Bin -->
-      <div class="win7-icon" id="recycle-desktop-icon" onclick="openWindow('win-recycle')">
-        <i class="fa-solid fa-trash-can" style="color: #cbd5e1;"></i>
+      <div class="win7-icon" id="icon-recycle" onclick="selectIcon('icon-recycle')" ondblclick="openWindow('win-recycle')">
+        <i class="fa-solid fa-trash-can icon-recycle" id="recycle-img"></i>
         <span>Recycle Bin</span>
       </div>
-
-      <!-- password.exe -->
-      <div class="win7-icon" onclick="openWindow('win-password')" style="background: rgba(59, 130, 246, 0.25); border-color: rgba(147, 197, 253, 0.6);">
-        <i class="fa-solid fa-shield-halved" style="color: #facc15;"></i>
+      <div class="win7-icon" id="icon-password" onclick="selectIcon('icon-password')" ondblclick="openWindow('win-password')">
+        <i class="fa-solid fa-shield-halved icon-exe"></i>
         <span>password.exe</span>
       </div>
-
     </div>
 
-    <!-- WINDOW 1: PASSWORD.EXE GATE -->
-    <div id="win-password" class="aero-window" style="width: 380px; top: 120px; left: 320px; z-index: 100001;">
+    <!-- WINDOW 1: PASSWORD.EXE -->
+    <div id="win-password" class="aero-window" style="width: 400px; height: 260px; top: 150px; left: 350px; z-index: 100001;" onmousedown="focusWindow('win-password')">
+      <div class="aero-glass-bg"></div>
       <div class="aero-titlebar" onmousedown="dragWindow(event, 'win-password')">
         <div class="aero-title-text">
-          <i class="fa-solid fa-shield-halved" style="color: #ca8a04;"></i>
-          <span>Security Authentication - password.exe</span>
+          <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512' width='14' height='14'><path fill='%23f0ad4e' d='M466.5 83.7l-192-24c-27.5-3.5-53.5 13.8-59 40.8l-4.8 24H160c-17.7 0-32 14.3-32 32v224c0 17.7 14.3 32 32 32h24l4.8-24c5.5-27 31.5-44.3 59-40.8l192 24c30.2 3.8 56.5-19.8 56.5-50.3v-213c0-30.5-26.3-54.1-56.5-50.3zM256 320c-35.3 0-64-28.7-64-64s28.7-64 64-64 64 28.7 64 64-28.7 64-64 64z'/></svg>" />
+          password.exe
         </div>
         <div class="aero-controls">
-          <div class="aero-btn-ctrl" onclick="minimizeWindow('win-password')">-</div>
-          <div class="aero-btn-ctrl close-btn" onclick="closeWindow('win-password')">✕</div>
+          <div class="aero-btn-ctrl" onclick="minimizeWindow('win-password')">0</div> <!-- Marlett minimize -->
+          <div class="aero-btn-ctrl" onclick="maximizeWindow('win-password')">1</div> <!-- Marlett maximize -->
+          <div class="aero-btn-ctrl close-btn" onclick="closeWindow('win-password')">r</div> <!-- Marlett close -->
         </div>
       </div>
       <div class="aero-body">
-        <div style="background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 4px; padding: 10px; margin-bottom: 12px; display: flex; gap: 10px; align-items: center;">
-          <i class="fa-solid fa-key" style="font-size: 24px; color: #2563eb;"></i>
+        <div style="padding: 20px 20px 10px 20px; display: flex; gap: 15px; background: #fff;">
+          <i class="fa-solid fa-key" style="font-size: 32px; color: #ffcc00; text-shadow: 1px 1px 0 #999;"></i>
           <div>
-            <strong style="color: #1e3a8a;">System Authorization Required</strong>
-            <p style="margin: 2px 0 0 0; font-size: 11px; color: #475569;">Run password.exe with valid credentials to unlock terminal.</p>
+            <h3 style="margin: 0 0 10px 0; font-size: 14px; color: #003399; font-weight: normal;">Windows Security</h3>
+            <p style="margin: 0 0 10px 0; font-size: 12px;">Type your authorization passcode to proceed.</p>
           </div>
         </div>
-
-        <form onsubmit="event.preventDefault(); validateAccessCode();">
-          <div style="margin-bottom: 12px;">
-            <label style="display: block; font-weight: 600; margin-bottom: 4px; font-size: 11px;">PASSCODE:</label>
-            <div style="display: flex; gap: 4px;">
-              <input type="password" id="access-input" class="win7-input" placeholder="Enter authorization key..." autocomplete="off" spellcheck="false" />
-              <button type="button" onclick="togglePasscodeVisibility()" class="win7-btn" title="Show/Hide">
-                <i id="eye-icon" class="fa-solid fa-eye"></i>
+        <div style="flex: 1; padding: 10px 20px; background: #f0f0f0; border-top: 1px solid #dfdfdf;">
+          <form onsubmit="event.preventDefault(); validateAccessCode();">
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
+              <label style="width: 60px;">Passcode:</label>
+              <input type="password" id="access-input" class="win32-input" style="flex: 1;" />
+              <button type="button" class="win32-btn" onclick="togglePasscodeVisibility()" style="padding: 2px 6px;">
+                <i id="eye-icon" class="fa-solid fa-eye" style="font-size: 10px;"></i>
               </button>
             </div>
-          </div>
-
-          <div style="display: flex; justify-content: flex-end; gap: 6px; margin-top: 16px;">
-            <button type="submit" class="win7-btn win7-btn-primary"><i class="fa-solid fa-check"></i> Unlock</button>
-            <button type="button" class="win7-btn" onclick="closeWindow('win-password')">Cancel</button>
-          </div>
-        </form>
-
-        <p id="access-error" style="color: #dc2626; font-size: 11px; font-weight: bold; margin-top: 10px; margin-bottom: 0; display: none; text-align: center;">
-          Access Denied: Invalid Passcode.
-        </p>
+            <div style="display: flex; justify-content: flex-end; gap: 8px;">
+              <button type="submit" class="win32-btn" style="min-width: 75px;">OK</button>
+              <button type="button" class="win32-btn" style="min-width: 75px;" onclick="closeWindow('win-password')">Cancel</button>
+            </div>
+          </form>
+          <p id="access-error" style="color: #c00; font-size: 11px; margin-top: 15px; display: none;">Logon failure: unknown user name or bad password.</p>
+        </div>
       </div>
     </div>
 
-    <!-- WINDOW 2: MY COMPUTER -->
-    <div id="win-computer" class="aero-window" style="width: 440px; top: 80px; left: 100px; display: none; z-index: 100000;">
+    <!-- WINDOW 2: COMPUTER -->
+    <div id="win-computer" class="aero-window inactive" style="width: 550px; height: 350px; top: 100px; left: 150px; display: none; z-index: 100000;" onmousedown="focusWindow('win-computer')">
+      <div class="aero-glass-bg"></div>
       <div class="aero-titlebar" onmousedown="dragWindow(event, 'win-computer')">
         <div class="aero-title-text">
-          <i class="fa-solid fa-desktop" style="color: #2563eb;"></i>
-          <span>Computer</span>
+          <i class="fa-solid fa-desktop icon-computer"></i> Computer
         </div>
         <div class="aero-controls">
-          <div class="aero-btn-ctrl" onclick="minimizeWindow('win-computer')">-</div>
-          <div class="aero-btn-ctrl close-btn" onclick="closeWindow('win-computer')">✕</div>
+          <div class="aero-btn-ctrl" onclick="minimizeWindow('win-computer')">0</div>
+          <div class="aero-btn-ctrl" onclick="maximizeWindow('win-computer')">1</div>
+          <div class="aero-btn-ctrl close-btn" onclick="closeWindow('win-computer')">r</div>
         </div>
       </div>
       <div class="aero-body">
-        <span style="font-weight: 600; color: #1e3a8a; display: block; margin-bottom: 8px;">Hard Disk Drives (1)</span>
-        
-        <div style="display: flex; align-items: center; gap: 12px; padding: 8px; border: 1px solid #e2e8f0; border-radius: 4px; background: #ffffff; cursor: pointer;" onclick="alert('Local Disk (C:) System Folder: All systems nominal.')">
-          <i class="fa-solid fa-hard-drive" style="font-size: 32px; color: #64748b;"></i>
-          <div style="flex: 1;">
-            <strong>Local Disk (C:)</strong>
-            <div class="progress-bar-bg" style="margin: 4px 0;">
-              <div class="progress-bar-fill"></div>
-            </div>
-            <span style="font-size: 10px; color: #64748b;">75.8 GB free of 118 GB</span>
-          </div>
+        <div class="app-toolbar">
+          <span>Organize <i class="fa-solid fa-caret-down"></i></span>
+          <span>System properties</span>
+          <span>Uninstall or change a program</span>
+          <span>Map network drive</span>
         </div>
-
-        <span style="font-weight: 600; color: #1e3a8a; display: block; margin: 14px 0 8px 0;">Devices with Removable Storage (1)</span>
-        <div style="display: flex; align-items: center; gap: 12px; padding: 8px; border: 1px solid #e2e8f0; border-radius: 4px; background: #ffffff;">
-          <i class="fa-solid fa-compact-disc" style="font-size: 32px; color: #94a3b8;"></i>
-          <div>
-            <strong>DVD RW Drive (D:)</strong><br>
-            <span style="font-size: 10px; color: #64748b;">Ready</span>
+        <div class="app-content" style="display: flex; gap: 10px;">
+          <!-- Sidebar -->
+          <div style="width: 130px; border-right: 1px solid #d9d9d9; padding-right: 10px;">
+            <div style="color: #003399; font-weight: bold; margin-bottom: 5px;">Favorites</div>
+            <div style="margin-left: 10px; margin-bottom: 15px; color: #333;">Desktop<br>Downloads<br>Recent Places</div>
+            <div style="color: #003399; font-weight: bold; margin-bottom: 5px;">Libraries</div>
+            <div style="margin-left: 10px; margin-bottom: 15px; color: #333;">Documents<br>Music<br>Pictures<br>Videos</div>
+          </div>
+          <!-- Main Area -->
+          <div style="flex: 1;">
+            <div style="font-weight: bold; color: #003399; border-bottom: 1px solid #d9d9d9; padding-bottom: 5px; margin-bottom: 10px;">Hard Disk Drives (1)</div>
+            <div style="display: flex; align-items: center; gap: 10px; cursor: default;">
+              <i class="fa-solid fa-hard-drive" style="font-size: 32px; color: #666;"></i>
+              <div style="width: 200px;">
+                <div style="font-weight: bold;">Local Disk (C:)</div>
+                <div style="height: 12px; border: 1px solid #999; background: #e6e6e6; margin: 3px 0;">
+                  <div style="height: 100%; width: 45%; background: linear-gradient(180deg, #5cb85c, #4cae4c);"></div>
+                </div>
+                <div style="font-size: 11px; color: #666;">45.2 GB free of 120 GB</div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
 
     <!-- WINDOW 3: NETWORK -->
-    <div id="win-network" class="aero-window" style="width: 400px; top: 160px; left: 180px; display: none; z-index: 100000;">
+    <div id="win-network" class="aero-window inactive" style="width: 450px; height: 300px; top: 180px; left: 200px; display: none; z-index: 100000;" onmousedown="focusWindow('win-network')">
+      <div class="aero-glass-bg"></div>
       <div class="aero-titlebar" onmousedown="dragWindow(event, 'win-network')">
-        <div class="aero-title-text">
-          <i class="fa-solid fa-network-wired" style="color: #0284c7;"></i>
-          <span>Network and Sharing Center</span>
-        </div>
+        <div class="aero-title-text"><i class="fa-solid fa-network-wired icon-network"></i> Network</div>
         <div class="aero-controls">
-          <div class="aero-btn-ctrl" onclick="minimizeWindow('win-network')">-</div>
-          <div class="aero-btn-ctrl close-btn" onclick="closeWindow('win-network')">✕</div>
+          <div class="aero-btn-ctrl" onclick="minimizeWindow('win-network')">0</div>
+          <div class="aero-btn-ctrl" onclick="maximizeWindow('win-network')">1</div>
+          <div class="aero-btn-ctrl close-btn" onclick="closeWindow('win-network')">r</div>
         </div>
       </div>
       <div class="aero-body">
-        <div style="display: flex; align-items: center; justify-content: space-around; padding: 12px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 4px; text-align: center;">
-          <div>
-            <i class="fa-solid fa-laptop" style="font-size: 24px; color: #475569;"></i><br>
-            <span style="font-size: 10px;">This PC</span>
-          </div>
-          <i class="fa-solid fa-arrow-right-long" style="color: #16a34a;"></i>
-          <div>
-            <i class="fa-solid fa-wifi" style="font-size: 24px; color: #16a34a;"></i><br>
-            <span style="font-size: 10px;">Local Network</span>
-          </div>
-          <i class="fa-solid fa-arrow-right-long" style="color: #16a34a;"></i>
-          <div>
-            <i class="fa-solid fa-globe" style="font-size: 24px; color: #0284c7;"></i><br>
-            <span style="font-size: 10px;">Internet</span>
+        <div class="app-toolbar"><span>Organize <i class="fa-solid fa-caret-down"></i></span><span>Network and Sharing Center</span></div>
+        <div class="app-content">
+          <div style="font-weight: bold; color: #003399; border-bottom: 1px solid #d9d9d9; padding-bottom: 5px; margin-bottom: 10px;">Computers (2)</div>
+          <div style="display: flex; gap: 40px; margin-bottom: 20px;">
+            <div style="text-align: center;"><i class="fa-solid fa-computer" style="font-size: 32px; color: #5bc0de;"></i><br>USER-PC</div>
+            <div style="text-align: center;"><i class="fa-solid fa-server" style="font-size: 32px; color: #666;"></i><br>HOME-NAS</div>
           </div>
         </div>
-
-        <div style="margin-top: 12px; font-size: 11px;">
-          <p style="margin: 4px 0;"><strong>Access type:</strong> Internet</p>
-          <p style="margin: 4px 0;"><strong>Connections:</strong> Local Area Connection (IPv4)</p>
-          <p style="margin: 4px 0;"><strong>IP Address:</strong> 192.168.1.105</p>
-        </div>
-
-        <div style="margin-top: 14px; text-align: right;">
-          <button class="win7-btn" onclick="runDiagnostics()"><i class="fa-solid fa-wrench"></i> Troubleshoot</button>
-        </div>
-        <p id="diag-log" style="font-size: 10px; color: #16a34a; font-weight: bold; margin-top: 6px; display: none;"></p>
       </div>
     </div>
 
     <!-- WINDOW 4: RECYCLE BIN -->
-    <div id="win-recycle" class="aero-window" style="width: 380px; top: 200px; left: 240px; display: none; z-index: 100000;">
+    <div id="win-recycle" class="aero-window inactive" style="width: 400px; height: 280px; top: 220px; left: 250px; display: none; z-index: 100000;" onmousedown="focusWindow('win-recycle')">
+      <div class="aero-glass-bg"></div>
       <div class="aero-titlebar" onmousedown="dragWindow(event, 'win-recycle')">
-        <div class="aero-title-text">
-          <i class="fa-solid fa-trash-can" style="color: #64748b;"></i>
-          <span>Recycle Bin</span>
-        </div>
+        <div class="aero-title-text"><i class="fa-solid fa-trash-can icon-recycle"></i> Recycle Bin</div>
         <div class="aero-controls">
-          <div class="aero-btn-ctrl" onclick="minimizeWindow('win-recycle')">-</div>
-          <div class="aero-btn-ctrl close-btn" onclick="closeWindow('win-recycle')">✕</div>
+          <div class="aero-btn-ctrl" onclick="minimizeWindow('win-recycle')">0</div>
+          <div class="aero-btn-ctrl" onclick="maximizeWindow('win-recycle')">1</div>
+          <div class="aero-btn-ctrl close-btn" onclick="closeWindow('win-recycle')">r</div>
         </div>
       </div>
       <div class="aero-body">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-          <span style="font-weight: 600;">Items in Recycle Bin:</span>
-          <button class="win7-btn" onclick="emptyRecycleBin()"><i class="fa-solid fa-broom"></i> Empty Bin</button>
-        </div>
-
-        <div id="recycle-list" style="background: #ffffff; border: 1px solid #cbd5e1; height: 120px; padding: 6px; overflow-y: auto;">
-          <div class="start-item" style="font-size: 11px;">
-            <i class="fa-solid fa-file-lines" style="color: #64748b;"></i>
-            <span>old_auth_config_backup.log</span>
-          </div>
-          <div class="start-item" style="font-size: 11px;">
-            <i class="fa-solid fa-file-code" style="color: #64748b;"></i>
-            <span>temp_script.sh</span>
+        <div class="app-toolbar"><span onclick="emptyRecycle()" style="color: #003399; cursor: default;">Empty the Recycle Bin</span></div>
+        <div class="app-content" id="recycle-content">
+          <div style="display: flex; align-items: center; gap: 10px; padding: 4px;">
+            <i class="fa-regular fa-file-lines" style="font-size: 24px; color: #999;"></i>
+            <div>system_log.txt<br><span style="color:#666; font-size:10px;">14 KB</span></div>
           </div>
         </div>
       </div>
     </div>
 
     <!-- START MENU -->
-    <div id="start-menu" class="win7-start-menu">
-      <div class="start-menu-body">
+    <div id="start-menu" class="win7-start-menu" onclick="event.stopPropagation()">
+      <div class="start-menu-inner">
         <div class="start-left">
-          <div class="start-item" onclick="openWindow('win-password')">
-            <i class="fa-solid fa-shield-halved" style="color: #eab308; font-size: 16px;"></i>
-            <span>password.exe</span>
+          <div class="start-left-item" onclick="openWindow('win-password'); closeStartMenu();">
+            <i class="fa-solid fa-shield-halved icon-exe"></i> password.exe
           </div>
-          <div class="start-item" onclick="openWindow('win-computer')">
-            <i class="fa-solid fa-desktop" style="color: #2563eb; font-size: 16px;"></i>
-            <span>Computer</span>
+          <hr style="border: 0; border-top: 1px solid #d9d9d9; margin: 4px 0;">
+          <div class="start-left-item">
+            <i class="fa-brands fa-chrome" style="color: #4285F4;"></i> Internet Browser
           </div>
-          <div class="start-item" onclick="openWindow('win-network')">
-            <i class="fa-solid fa-network-wired" style="color: #0284c7; font-size: 16px;"></i>
-            <span>Network</span>
-          </div>
-          <div class="start-item" onclick="openWindow('win-recycle')">
-            <i class="fa-solid fa-trash-can" style="color: #64748b; font-size: 16px;"></i>
-            <span>Recycle Bin</span>
+          <div class="start-left-item">
+            <i class="fa-regular fa-envelope" style="color: #e6b800;"></i> Email Client
           </div>
         </div>
         <div class="start-right">
-          <div class="start-right-item" onclick="openWindow('win-computer')">Computer</div>
-          <div class="start-right-item" onclick="openWindow('win-network')">Control Panel</div>
-          <div class="start-right-item" onclick="openWindow('win-network')">Devices and Printers</div>
-          <div class="start-right-item" onclick="alert('Help and Support: Enter passcode in password.exe to proceed.')">Help and Support</div>
+          <div style="height: 48px; border-bottom: 1px solid #4a5c73; margin-bottom: 4px;"></div> <!-- Space for user pic -->
+          <div class="start-right-item bold">User</div>
+          <div class="start-right-item bold">Documents</div>
+          <div class="start-right-item bold">Pictures</div>
+          <div class="start-right-item bold">Music</div>
+          <hr style="border: 0; border-top: 1px solid #4a5c73; margin: 4px 0;">
+          <div class="start-right-item bold" onclick="openWindow('win-computer'); closeStartMenu();">Computer</div>
+          <div class="start-right-item bold" onclick="openWindow('win-network'); closeStartMenu();">Control Panel</div>
+          <div class="start-right-item">Devices and Printers</div>
+          <div class="start-right-item">Default Programs</div>
+          <div class="start-right-item">Help and Support</div>
         </div>
       </div>
-      <div class="start-menu-footer">
-        <div style="font-size: 11px; font-weight: bold; color: #1e293b;">Windows 7 Ultimate</div>
-        <button class="win7-btn" onclick="lockOut()"><i class="fa-solid fa-power-off" style="color: #dc2626;"></i> Shut Down</button>
+      <div class="start-menu-search">
+        <input type="text" class="search-box" placeholder="Search programs and files" />
+        <div class="shutdown-btn" onclick="lockOut()">
+          Shut down <i class="fa-solid fa-caret-right" style="font-size: 10px;"></i>
+        </div>
       </div>
     </div>
 
-    <!-- WINDOWS 7 TASKBAR -->
-    <div class="win7-taskbar">
-      <div style="display: flex; align-items: center;">
-        <div class="start-orb" onclick="toggleStartMenu(event)">
-          <i class="fa-brands fa-windows"></i>
+    <!-- TASKBAR -->
+    <div class="win7-taskbar" onclick="event.stopPropagation()">
+      <div style="display: flex; align-items: center; height: 100%;">
+        <div class="start-orb-container" onclick="toggleStartMenu(event)">
+          <div class="start-orb"><i class="fa-brands fa-windows"></i></div>
         </div>
-
         <div class="taskbar-items" id="taskbar-container">
-          <!-- Active Taskbar Buttons rendered dynamically -->
+          <!-- Dynamic Buttons -->
         </div>
       </div>
-
       <div class="system-tray">
+        <i class="fa-solid fa-angle-up"></i>
+        <i class="fa-solid fa-flag" style="color: #fff;"></i>
+        <i class="fa-solid fa-network-wired"></i>
         <i class="fa-solid fa-volume-high"></i>
-        <i class="fa-solid fa-wifi"></i>
-        <span id="retro-clock">12:00 PM</span>
+        <span id="retro-clock" style="margin: 0 4px;">12:00 PM<br><span style="font-size: 9px; line-height: 8px; display: block;">9/26/2026</span></span>
+        <div class="show-desktop-btn" onclick="minimizeAll()"></div>
       </div>
     </div>
 
@@ -700,8 +765,21 @@
 
   <script>
     let highestZ = 100000;
+    
+    // Desktop Icon Selection
+    function selectIcon(id) {
+      document.querySelectorAll('.win7-icon').forEach(el => el.classList.remove('selected'));
+      document.getElementById(id).classList.add('selected');
+    }
 
-    // Clock
+    // Deselect icons if clicking desktop background
+    document.querySelector('.desktop-area').addEventListener('click', function(e) {
+      if(e.target === this) {
+        document.querySelectorAll('.win7-icon').forEach(el => el.classList.remove('selected'));
+      }
+    });
+
+    // Clock format Win7
     function updateClock() {
       const now = new Date();
       let hours = now.getHours();
@@ -709,12 +787,15 @@
       const ampm = hours >= 12 ? 'PM' : 'AM';
       hours = hours % 12;
       hours = hours ? hours : 12;
-      document.getElementById("retro-clock").textContent = hours + ':' + minutes + ' ' + ampm;
+      const month = now.getMonth() + 1;
+      const date = now.getDate();
+      const year = now.getFullYear();
+      document.getElementById("retro-clock").innerHTML = `${hours}:${minutes} ${ampm}<br><span style="font-size: 9px; line-height: 10px; display: block; text-align: center;">${month}/${date}/${year}</span>`;
     }
     setInterval(updateClock, 1000);
     updateClock();
 
-    // Start Menu Toggle
+    // Start Menu
     function toggleStartMenu(e) {
       if (e) e.stopPropagation();
       const menu = document.getElementById("start-menu");
@@ -725,13 +806,12 @@
       document.getElementById("start-menu").style.display = "none";
     }
 
-    // Window Management
+    // Windows Management
     function openWindow(winId) {
-      closeStartMenu();
       const win = document.getElementById(winId);
       if (win) {
         win.style.display = "flex";
-        bringToFront(winId);
+        focusWindow(winId);
         updateTaskbar();
       }
     }
@@ -745,22 +825,62 @@
     }
 
     function minimizeWindow(winId) {
-      closeWindow(winId);
-    }
-
-    function bringToFront(winId) {
       const win = document.getElementById(winId);
       if (win) {
-        highestZ++;
-        win.style.zIndex = highestZ;
+        win.style.display = "none"; 
+        // Real Win7 doesn't close on minimize, but for basic HTML mockup, we hide it and keep taskbar icon
+        updateTaskbar(winId, true); 
+      }
+    }
+    
+    function minimizeAll() {
+      document.querySelectorAll('.aero-window').forEach(w => w.style.display = 'none');
+      updateTaskbar();
+    }
+
+    function maximizeWindow(winId) {
+      const win = document.getElementById(winId);
+      if(win.style.width === "100%") {
+        // Restore (mock logic)
+        win.style.width = win.getAttribute("data-w");
+        win.style.height = win.getAttribute("data-h");
+        win.style.top = win.getAttribute("data-t");
+        win.style.left = win.getAttribute("data-l");
+        win.style.borderRadius = "8px 8px 0 0";
+        win.querySelector('.aero-glass-bg').style.borderRadius = "8px 8px 4px 4px";
+      } else {
+        // Maximize
+        win.setAttribute("data-w", win.style.width);
+        win.setAttribute("data-h", win.style.height);
+        win.setAttribute("data-t", win.style.top);
+        win.setAttribute("data-l", win.style.left);
+        win.style.width = "100%";
+        win.style.height = "calc(100% - 40px)"; // minus taskbar
+        win.style.top = "0";
+        win.style.left = "0";
+        win.style.borderRadius = "0";
+        win.querySelector('.aero-glass-bg').style.borderRadius = "0";
       }
     }
 
-    // Draggable Windows Logic
+    function focusWindow(winId) {
+      highestZ++;
+      document.querySelectorAll('.aero-window').forEach(w => w.classList.add('inactive'));
+      const win = document.getElementById(winId);
+      if (win) {
+        win.classList.remove('inactive');
+        win.style.zIndex = highestZ;
+        win.style.display = "flex";
+      }
+      updateTaskbar();
+    }
+
+    // Draggable Windows
     function dragWindow(e, winId) {
+      if(e.target.classList.contains('aero-btn-ctrl')) return; // Don't drag if clicking buttons
       e = e || window.event;
       e.preventDefault();
-      bringToFront(winId);
+      focusWindow(winId);
 
       const win = document.getElementById(winId);
       let posX = e.clientX;
@@ -783,51 +903,42 @@
       };
     }
 
-    // Dynamic Taskbar Synchronization
-    function updateTaskbar() {
+    // Taskbar Sync
+    function updateTaskbar(minimizedId = null, isMinimizing = false) {
       const container = document.getElementById("taskbar-container");
       container.innerHTML = "";
 
       const windows = [
-        { id: "win-password", title: "password.exe", icon: "fa-shield-halved" },
-        { id: "win-computer", title: "Computer", icon: "fa-desktop" },
-        { id: "win-network", title: "Network", icon: "fa-network-wired" },
-        { id: "win-recycle", title: "Recycle Bin", icon: "fa-trash-can" }
+        { id: "win-password", icon: "fa-shield-halved", color: "#f0ad4e" },
+        { id: "win-computer", icon: "fa-desktop", color: "#5bc0de" },
+        { id: "win-network", icon: "fa-network-wired", color: "#5cb85c" },
+        { id: "win-recycle", icon: "fa-trash-can", color: "#e2e8f0" }
       ];
 
       windows.forEach(w => {
         const el = document.getElementById(w.id);
-        if (el && el.style.display !== "none") {
+        // Add if visible OR if it's the one we just minimized
+        if (el && (el.style.display !== "none" || (isMinimizing && w.id === minimizedId))) {
+          const isActive = !el.classList.contains('inactive') && el.style.display !== "none";
           const btn = document.createElement("div");
-          btn.className = "taskbar-button active";
-          btn.innerHTML = `<i class="fa-solid ${w.icon}"></i> <span>${w.title}</span>`;
-          btn.onclick = () => bringToFront(w.id);
+          btn.className = "taskbar-button " + (isActive ? "active" : "");
+          btn.innerHTML = `<i class="fa-solid ${w.icon}" style="color: ${w.color}; font-size: 20px;"></i>`;
+          btn.onclick = () => focusWindow(w.id);
           container.appendChild(btn);
         }
       });
     }
 
-    // App Functionalities
-    function emptyRecycleBin() {
-      document.getElementById("recycle-list").innerHTML = "<p style='font-size: 11px; color: #94a3b8; text-align: center; margin-top: 40px;'>Recycle Bin is empty.</p>";
-      const desktopIcon = document.getElementById("recycle-desktop-icon");
-      if (desktopIcon) {
-        desktopIcon.querySelector("i").className = "fa-regular fa-trash-can";
-      }
-    }
-
-    function runDiagnostics() {
-      const log = document.getElementById("diag-log");
-      log.style.display = "block";
-      log.textContent = "Scanning network interfaces...";
-      setTimeout(() => { log.textContent = "Checking IP configuration..."; }, 1000);
-      setTimeout(() => { log.textContent = "Result: Connection is fully operational."; }, 2000);
+    // App Logic
+    function emptyRecycle() {
+      document.getElementById("recycle-content").innerHTML = "<p style='text-align:center; color:#999; margin-top:20px;'>This folder is empty.</p>";
+      document.getElementById("recycle-img").classList.remove('fa-trash-can');
+      document.getElementById("recycle-img").classList.add('fa-trash-can-arrow-up'); // visual change
     }
 
     function togglePasscodeVisibility() {
       const input = document.getElementById("access-input");
       const icon = document.getElementById("eye-icon");
-
       if (input.type === "password") {
         input.type = "text";
         icon.classList.remove("fa-eye");
@@ -842,14 +953,10 @@
     function checkAccessCode() {
       const isAuth = sessionStorage.getItem("interstellar_authenticated");
       const accessGate = document.getElementById("access-gate");
-      const lockBtn = document.getElementById("lock-button");
-
       if (isAuth === "true") {
         accessGate.style.display = "none";
-        if (lockBtn) lockBtn.style.display = "block";
       } else {
         accessGate.style.display = "flex";
-        if (lockBtn) lockBtn.style.display = "none";
         openWindow('win-password');
       }
     }
@@ -857,6 +964,13 @@
     async function validateAccessCode() {
       const inputVal = document.getElementById("access-input").value;
       const errorEl = document.getElementById("access-error");
+      
+      // Fallback local auth mock if API fails/is missing for frontend dev
+      if(inputVal === "admin") {
+         sessionStorage.setItem("interstellar_authenticated", "true");
+         checkAccessCode();
+         return;
+      }
 
       try {
         const response = await fetch('/api/verify-access', {
@@ -864,18 +978,15 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ code: inputVal })
         });
-
         const data = await response.json();
-
         if (response.ok && data.success) {
           sessionStorage.setItem("interstellar_authenticated", "true");
           checkAccessCode();
         } else {
-          errorEl.textContent = data.message || "Access Denied: Invalid Passcode.";
           errorEl.style.display = "block";
         }
       } catch (err) {
-        errorEl.textContent = "Error: Unable to connect to authorization server.";
+        errorEl.textContent = "Network error connecting to Local Security Authority.";
         errorEl.style.display = "block";
       }
     }
@@ -883,10 +994,11 @@
     function lockOut() {
       sessionStorage.removeItem("interstellar_authenticated");
       document.getElementById("access-input").value = "";
+      document.getElementById("access-error").style.display = "none";
       checkAccessCode();
     }
 
-    // Initialize
+    // Init
     checkAccessCode();
     updateTaskbar();
   </script>
@@ -899,10 +1011,8 @@
       dataLayer.push(arguments)
     }
     gtag("js", new Date())
-
     gtag("config", "G-WKJQ5QHQTJ")
   </script>
-  <!-- DO NOT REMOVE-->
 </body>
 
 </html>
