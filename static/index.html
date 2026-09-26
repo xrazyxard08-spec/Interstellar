@@ -321,25 +321,157 @@
     #access-gate .win7-window { width: 400px; }
     #access-gate table { border: none !important; background: transparent !important; }
     #access-gate table td { border: none !important; }
+
+    /* ===================== AUTHENTICATED HOME DESKTOP ===================== */
+    #win7-home {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      display: none;
+    }
+
+    .win7-taskbar-apps {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding-left: 8px;
+      min-width: 0;
+    }
+
+    .taskbar-app-btn {
+      height: 30px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0 10px;
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      color: #fff;
+      font-size: 12px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .taskbar-app-btn:hover { background: rgba(255, 255, 255, 0.22); }
+
+    .taskbar-app-btn.active {
+      background: rgba(255, 255, 255, 0.34);
+      box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.4);
+    }
+
+    .tray-lock-btn {
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 14px;
+      cursor: pointer;
+      padding: 4px 2px;
+    }
+
+    .tray-lock-btn:hover { color: #ffd18a; }
+
+    /* ---------- App windows (draggable, maximizable) ---------- */
+    .app-window {
+      position: absolute;
+      z-index: 20;
+      display: none;
+      flex-direction: column;
+      min-width: 300px;
+      min-height: 220px;
+    }
+
+    .app-titlebar { cursor: move; }
+
+    .app-window-body {
+      flex: 1;
+      overflow: auto;
+      background: #CCCCCC;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .app-window.maximized {
+      top: 0 !important;
+      left: 0 !important;
+      right: 0;
+      bottom: 42px;
+      width: auto !important;
+      height: auto !important;
+      border-radius: 0;
+      box-shadow: none;
+    }
   </style>
 </head>
 
 <body class="center" onload="SplashT" style="background-color: #CCCCCC;">
-  <!-- LOCKOUT BUTTON -->
-  <button id="lock-button" onclick="lockOut()" style="position: fixed; top: 10px; right: 10px; z-index: 99998; display: none; background: #CCCCCC; color: #000000; border: 2px outset #FFFFFF; padding: 4px 10px; font-family: 'Courier New', Courier, monospace; font-size: 12px; font-weight: bold; cursor: pointer;">
-    [ LOCK SESSION ]
-  </button>
 
-  <div class="nav-bar"></div>
-  <div class="main">
-    <h1 class="title">&#73;&#110;&#116;&#101;&#114;&#115;&#116;&#101;&#108;&#108;&#97;&#114;</h1>
-    <p id="splash"></p>
-    <div class="search-container">
-      <form id="fv" method="POST">
-        <input id="input" class="truncate" placeholder="Search or enter a URL" type="text" />
-      </form>
+  <!-- ===================== AUTHENTICATED HOME DESKTOP ===================== -->
+  <div id="win7-home">
+    <div class="win7-bg" onclick="deselectIcons()"></div>
+
+    <div class="win7-icons">
+      <div class="win7-icon" ondblclick="openApp('interstellar')" onclick="selectIcon(this)">
+        <div class="icon-glyph"><i class="fa-solid fa-globe"></i></div>
+        <span>Interstellar</span>
+      </div>
+    </div>
+
+    <!-- App window: wraps the existing nav bar + search app, unchanged -->
+    <div id="app-interstellar" class="win7-window app-window" style="top: 70px; left: 110px; width: 620px; height: 420px;">
+      <div class="win7-titlebar app-titlebar">
+        <span class="win7-titlebar-icon"><i class="fa-solid fa-globe"></i></span>
+        <span class="win7-titlebar-text">Interstellar</span>
+        <div class="win7-titlebar-controls">
+          <div class="win7-tbtn" onclick="minimizeApp('interstellar')" title="Minimize">&#95;</div>
+          <div class="win7-tbtn" onclick="toggleMaximizeApp('interstellar')" title="Maximize / Restore"><i class="fa-regular fa-square"></i></div>
+          <div class="win7-tbtn win7-tbtn-close" onclick="minimizeApp('interstellar')" title="Close">&#10005;</div>
+        </div>
+      </div>
+      <div class="app-window-body">
+        <div class="nav-bar"></div>
+        <div class="main">
+          <h1 class="title">&#73;&#110;&#116;&#101;&#114;&#115;&#116;&#101;&#108;&#108;&#97;&#114;</h1>
+          <p id="splash"></p>
+          <div class="search-container">
+            <form id="fv" method="POST">
+              <input id="input" class="truncate" placeholder="Search or enter a URL" type="text" />
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="win7-taskbar">
+      <div class="win7-start" onclick="toggleStartMenu('home')"><i class="fa-solid fa-circle-play" style="transform: rotate(-90deg);"></i></div>
+      <div class="win7-taskbar-apps">
+        <div class="taskbar-app-btn active" id="taskbar-btn-interstellar" onclick="toggleAppFocus('interstellar')">
+          <i class="fa-solid fa-globe"></i> Interstellar
+        </div>
+      </div>
+      <div class="win7-tray">
+        <button id="lock-button" onclick="lockOut()" class="tray-lock-btn" title="Lock session"><i class="fa-solid fa-lock"></i></button>
+        <div class="win7-clock">
+          <div id="win7-home-clock-time">--:--</div>
+          <div id="win7-home-clock-date">--/--/----</div>
+        </div>
+      </div>
+    </div>
+
+    <div id="win7-home-start-menu" class="win7-start-menu">
+      <div class="win7-start-menu-header">Interstellar</div>
+      <div class="win7-start-menu-item" onclick="toggleStartMenu('home'); openApp('interstellar');">
+        <i class="fa-solid fa-globe"></i> Open Interstellar
+      </div>
+      <div class="win7-start-menu-item" onclick="toggleStartMenu('home'); lockOut();">
+        <i class="fa-solid fa-lock"></i> Lock session
+      </div>
     </div>
   </div>
+
   <script src="/assets/js/vendor.js"></script>
   <script src="assets/js/search.js"></script>
   <script src="/assets/js/home.js"></script>
@@ -360,7 +492,7 @@
     </div>
 
     <div class="win7-taskbar">
-      <div class="win7-start" onclick="toggleStartMenu()"><i class="fa-solid fa-circle-play" style="transform: rotate(-90deg);"></i></div>
+      <div class="win7-start" onclick="toggleStartMenu('lock')"><i class="fa-solid fa-circle-play" style="transform: rotate(-90deg);"></i></div>
       <div class="win7-taskbar-mid">Session locked</div>
       <div class="win7-tray">
         <i class="fa-solid fa-shield-halved"></i>
@@ -489,20 +621,21 @@
       document.getElementById("win7-desktop").style.display = "block";
       document.getElementById("exe-loader").style.display = "none";
       document.getElementById("access-gate").style.display = "none";
+      document.getElementById("win7-home").style.display = "none";
       document.getElementById("win7-start-menu").style.display = "none";
     }
 
     function checkAccessCode() {
       const isAuth = sessionStorage.getItem("interstellar_authenticated");
-      const lockBtn = document.getElementById("lock-button");
 
       if (isAuth === "true") {
         document.getElementById("win7-desktop").style.display = "none";
         document.getElementById("exe-loader").style.display = "none";
         document.getElementById("access-gate").style.display = "none";
-        if (lockBtn) lockBtn.style.display = "block";
+        document.getElementById("win7-home").style.display = "block";
+        openApp("interstellar");
       } else {
-        if (lockBtn) lockBtn.style.display = "none";
+        document.getElementById("win7-home").style.display = "none";
         showDesktop();
       }
     }
@@ -527,25 +660,87 @@
       document.querySelectorAll(".win7-icon").forEach(i => i.classList.remove("selected"));
     }
 
-    function toggleStartMenu() {
-      const menu = document.getElementById("win7-start-menu");
-      menu.style.display = menu.style.display === "block" ? "none" : "block";
+    function toggleStartMenu(which) {
+      const id = which === "home" ? "win7-home-start-menu" : "win7-start-menu";
+      const menu = document.getElementById(id);
+      if (menu) menu.style.display = menu.style.display === "block" ? "none" : "block";
     }
 
     function updateWin7Clock() {
-      const timeEl = document.getElementById("win7-clock-time");
-      const dateEl = document.getElementById("win7-clock-date");
-      if (!timeEl) return;
       const now = new Date();
       let h = now.getHours();
       const m = String(now.getMinutes()).padStart(2, "0");
       const ampm = h >= 12 ? "PM" : "AM";
       h = h % 12; if (h === 0) h = 12;
-      timeEl.textContent = `${h}:${m} ${ampm}`;
-      if (dateEl) dateEl.textContent = now.toLocaleDateString();
+      const timeStr = `${h}:${m} ${ampm}`;
+      const dateStr = now.toLocaleDateString();
+      ["win7-clock-time", "win7-home-clock-time"].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = timeStr;
+      });
+      ["win7-clock-date", "win7-home-clock-date"].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = dateStr;
+      });
     }
     updateWin7Clock();
     setInterval(updateWin7Clock, 1000);
+
+    /* ---------- App window manager (open / minimize / maximize / focus) ---------- */
+    function openApp(name) {
+      const win = document.getElementById("app-" + name);
+      const btn = document.getElementById("taskbar-btn-" + name);
+      if (!win) return;
+      win.style.display = "flex";
+      if (btn) btn.classList.add("active");
+    }
+
+    function minimizeApp(name) {
+      const win = document.getElementById("app-" + name);
+      const btn = document.getElementById("taskbar-btn-" + name);
+      if (!win) return;
+      win.style.display = "none";
+      if (btn) btn.classList.remove("active");
+    }
+
+    function toggleAppFocus(name) {
+      const win = document.getElementById("app-" + name);
+      if (!win) return;
+      if (win.style.display === "none" || !win.style.display) {
+        openApp(name);
+      } else {
+        minimizeApp(name);
+      }
+    }
+
+    function toggleMaximizeApp(name) {
+      const win = document.getElementById("app-" + name);
+      if (win) win.classList.toggle("maximized");
+    }
+
+    /* ---------- Drag any .app-window by its .app-titlebar ---------- */
+    (function enableAppWindowDrag() {
+      let dragEl = null, offsetX = 0, offsetY = 0;
+
+      document.addEventListener("mousedown", (e) => {
+        const handle = e.target.closest(".app-titlebar");
+        if (!handle) return;
+        const win = handle.closest(".app-window");
+        if (!win || win.classList.contains("maximized")) return;
+        dragEl = win;
+        const rect = win.getBoundingClientRect();
+        offsetX = e.clientX - rect.left;
+        offsetY = e.clientY - rect.top;
+      });
+
+      document.addEventListener("mousemove", (e) => {
+        if (!dragEl) return;
+        dragEl.style.left = `${e.clientX - offsetX}px`;
+        dragEl.style.top = `${e.clientY - offsetY}px`;
+      });
+
+      document.addEventListener("mouseup", () => { dragEl = null; });
+    })();
 
     async function validateAccessCode() {
       const inputVal = document.getElementById("access-input").value;
